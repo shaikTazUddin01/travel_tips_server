@@ -1,15 +1,20 @@
-import { Request, Response } from "express"
-import { authService } from "./auth.service"
+import { Request, Response } from "express";
+import { authService } from "./auth.service";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status";
 
-const createAuth=async(req:Request,res:Response)=>{
-    const result=await authService.createAuthInFoDB(req.body)
+const login = catchAsync(async (req, res) => {
+  const result = await authService.authLogin(req.body);
 
-    res.json({
-        success:true,
-        data:result
-    })
-}
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "login success",
+    data: result,
+  });
+});
 
-export const authController={
-    createAuth
-}
+export const authController = {
+  login,
+};
