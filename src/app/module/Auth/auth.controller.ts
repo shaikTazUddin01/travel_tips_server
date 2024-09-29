@@ -7,6 +7,8 @@ import httpStatus from "http-status";
 const login = catchAsync(async (req, res) => {
   const result = await authService.authLogin(req.body);
 
+  res.cookie("refreshToken", result?.refreshToken);
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

@@ -1,11 +1,15 @@
-
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { userService } from "./user.service";
+// import cookieParser from "cookie-parser";
 
 const createUser = catchAsync(async (req, res) => {
+  // check user exist or not
+
   const result = await userService.createUserInFoDB(req.body);
+
+ 
 
   sendResponse(res, {
     success: true,
