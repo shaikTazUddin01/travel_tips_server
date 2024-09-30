@@ -7,7 +7,6 @@ import { User } from "../User/user.model";
 import { AppError } from "../../error/AppErrors";
 import httpStatus from "http-status";
 
-
 // create post
 const createPost = async (payload: IPost, user: string) => {
   const { userId } = decodedToken(user) as JwtPayload;
@@ -19,18 +18,32 @@ const createPost = async (payload: IPost, user: string) => {
   payload.user = isUserExists?._id;
 
   const res = await Post.create(payload);
-  console.log(res);
   return res;
 };
 
 // get all post
 const getAllPost = async () => {
-  const res = await Post.find().populate('user');
-  // console.log(res);
+  const res = await Post.find().populate("user");
+  return res;
+};
+// get my post
+const getMyPost = async (userId: string) => {
+  console.log(userId);
+  const res = await Post.find({ user: userId }).populate("user");
+  
+  return res;
+};
+// delete post
+const deletePost = async (id: string) => {
+ 
+  const res = await Post.findByIdAndDelete(id);
+  
   return res;
 };
 
 export const postServices = {
   createPost,
-  getAllPost
+  getAllPost,
+  getMyPost,
+  deletePost
 };
