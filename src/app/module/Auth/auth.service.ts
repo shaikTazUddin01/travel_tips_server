@@ -33,6 +33,7 @@ const authLogin = async (data: IAuth) => {
     userId: isUserExists?._id,
     email: isUserExists?.email,
     name: isUserExists?.name,
+    role:isUserExists?.role,
     phoneNumber: isUserExists?.phoneNumber,
     image: isUserExists?.image,
   };

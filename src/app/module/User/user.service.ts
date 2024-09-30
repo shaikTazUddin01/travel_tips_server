@@ -1,7 +1,10 @@
 import httpStatus from "http-status";
 import { AppError } from "../../error/AppErrors";
-import { IUSER } from "./user.interface";
+import { IDecodedUser, IUSER } from "./user.interface";
 import { User } from "./user.model";
+import config from "../../config";
+import { decodedToken } from "../../utils/decodedToken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 // create new user
 const createUserInFoDB = async (data: IUSER) => {
@@ -19,6 +22,23 @@ const createUserInFoDB = async (data: IUSER) => {
   return res;
 };
 
+//update profile
+const updateProfile = async (payload: Partial<IUSER>, userToken: string) => {
+  const decoded = decodedToken(userToken) as JwtPayload;
+
+  // console.log(decoded);
+
+  if (!decoded) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "you are not authorized");
+  }
+
+  const res = await User.findByIdAndUpdate(decoded?.userId, payload, {
+    new: true,
+  });
+  return res;
+};
+
 export const userService = {
   createUserInFoDB,
+  updateProfile,
 };
