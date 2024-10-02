@@ -7,8 +7,11 @@ import { decodedToken } from "../../utils/decodedToken";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 // create new user
-const createUserInFoDB = async (data: IUSER) => {
+const createUserInFoDB = async (data: IUSER,profileImage:string) => {
+ 
   //check user exists or not
+  // console.log(data);
+  data.image=profileImage
   const isUserExists = await User.findOne({ email: data?.email });
   if (isUserExists) {
     throw new AppError(
@@ -16,10 +19,12 @@ const createUserInFoDB = async (data: IUSER) => {
       "This user already exists.try with another E-mail"
     );
   }
-  // create user
+  // // create user
   data.role = "USER";
+  // console.log(data);
   const res = await User.create(data);
   return res;
+  // return res
 };
 
 //update profile

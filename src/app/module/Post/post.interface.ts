@@ -9,6 +9,7 @@ export interface IPost {
     like:number;
     comment:number;
     share:number;
+    isVerify:boolean
   }
  
   

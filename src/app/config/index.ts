@@ -10,4 +10,7 @@ export default {
   accessToken_ExpiresIn:process.env.ACCESS_TOKEN_EXPIRESIN,
   refreshToken_Secret:process.env.REFRESH_TOKEN_SECRET,
   refreshToken_ExpiresIn:process.env.REFRESH_TOKEN_EXPIRESIN ,
+  cloudinary_name:process.env.CLOUDINARY_NAME,
+  cloudinary_api:process.env.CLOUDINARY_API_KEY,
+  cloudinary_secret:process.env.CLOUDINARY_API_SECRET,
 };

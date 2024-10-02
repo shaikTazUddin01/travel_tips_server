@@ -5,13 +5,15 @@ import router from "./app/router";
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import notFound from "./app/middleware/notFound";
 import cookieParser from "cookie-parser";
+// import bodyParser from "body-parser";
 // import globalErrorHandler from './app/middleware/globalErrorHandler'
 
 const app = express();
 //middleware
-app.use(cors());
+app.use(cors({origin:["http://localhost:3000"],credentials:true}));
 app.use(express.json());
 app.use(cookieParser());
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 //router
 app.use("/api/v1", router);

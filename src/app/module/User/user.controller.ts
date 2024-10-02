@@ -8,7 +8,11 @@ import { AppError } from "../../error/AppErrors";
 const createUser = catchAsync(async (req, res) => {
   // check user exist or not
 
-  const result = await userService.createUserInFoDB(req.body);
+  
+  const {data}=req.body;
+  const file=req?.file?.path
+  // console.log(JSON.parse(data));
+  const result = await userService.createUserInFoDB(JSON.parse(data),file as string);
 
  
 

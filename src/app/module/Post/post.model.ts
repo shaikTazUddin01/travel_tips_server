@@ -35,6 +35,10 @@ const postSchema = new Schema<IPost>({
   share: {
     type: Number,
     default: 0,
+  },
+isVerify: {
+    type: Boolean,
+    default: false,
   }
 }, { timestamps: true });
 
