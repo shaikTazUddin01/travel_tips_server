@@ -36,6 +36,18 @@ const getMyAllPost = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// GET SEecific user post
+const getSpecificUserPost = catchAsync(async (req, res) => {
+  const userId=req.params.id
+//   console.log(userId);
+  const result = await postServices.getSpecificUserPost(userId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post retrieve success",
+    data: result,
+  });
+});
 const deletePost = catchAsync(async (req, res) => {
   
 const id=req.params.id
@@ -53,5 +65,6 @@ export const postcontroller = {
   createPost,
   getAllPost,
   getMyAllPost,
-  deletePost
+  deletePost,
+  getSpecificUserPost 
 };

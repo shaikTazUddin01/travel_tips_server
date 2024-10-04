@@ -21,15 +21,14 @@ const createPost = async (payload: IPost, user: string) => {
   return res;
 };
 
-
 // get all post
-const getAllPost = async (queryData:Record<string,string>|null) => {
-// console.log(queryData);
-let query:{tags?:string}={}
-if (queryData?.tags) {
-  query.tags=queryData.tags
-}
-// console.log(query);
+const getAllPost = async (queryData: Record<string, string> | null) => {
+  // console.log(queryData);
+  let query: { tags?: string } = {};
+  if (queryData?.tags) {
+    query.tags = queryData.tags;
+  }
+  // console.log(query);
   const res = await Post.find(query).populate("user");
   // console.log(res);
   return res;
@@ -38,14 +37,17 @@ if (queryData?.tags) {
 const getMyPost = async (userId: string) => {
   // console.log(userId);
   const res = await Post.find({ user: userId }).populate("user");
-  
+  return res;
+};
+// get specific post
+const getSpecificUserPost = async (userId: string) => {
+  // console.log(userId);
+  const res = await Post.find({ user: userId }).populate("user");
   return res;
 };
 // delete post
 const deletePost = async (id: string) => {
- 
   const res = await Post.findByIdAndDelete(id);
-  
   return res;
 };
 
@@ -53,5 +55,6 @@ export const postServices = {
   createPost,
   getAllPost,
   getMyPost,
-  deletePost
+  deletePost,
+  getSpecificUserPost
 };
