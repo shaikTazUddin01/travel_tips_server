@@ -18,13 +18,15 @@ app.use(cookieParser());
 //router
 app.use("/api/v1", router);
 
+//global error middleware
+app.use(globalErrorHandler);
+
+
 // check server conncetion
 app.get("/", (req: Request, res: Response) => {
   res.send("The server is connect successfully");
 });
-
-//error middleware
-app.use(globalErrorHandler);
+// not found middleware
 app.use(notFound);
 
 export default app;

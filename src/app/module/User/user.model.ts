@@ -5,13 +5,17 @@ import config from "../../config";
 
 const userSchema = new Schema<IUSER>({
   name: { type: String, required: true },
+  userName:{type:String},
   email: { type: String, required: true, unique: true },
   address: { type: String, required: true },
   password: { type: String, required: true },
   image: { type: String, required: true },
+  age: { type: Number, required: true },
   gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
   role: { type: String, enum: ["USER", "ADMIN"], required: true },
   phoneNumber: { type: String, required: true },
+  isVerify:{type:Boolean,default:false},
+  status:{type:String,enum:["Active","Blocked"],default:"Active"}
 });
 
 userSchema.pre("save", async function (next) {

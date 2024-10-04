@@ -9,5 +9,6 @@ const router = Router()
 
 router.post('/',multerUpload.single('image'),userController.createUser)
 router.post('/updateProfile',userController.updateUser)
+router.get('/getUsers',auth("USER","ADMIN"),userController.getAllUser)
 
 export const userRouter = router

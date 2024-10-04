@@ -7,11 +7,10 @@ import { decodedToken } from "../../utils/decodedToken";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 // create new user
-const createUserInFoDB = async (data: IUSER,profileImage:string) => {
- 
+const createUserInFoDB = async (data: IUSER, profileImage: string) => {
   //check user exists or not
   // console.log(data);
-  data.image=profileImage
+  data.image = profileImage;
   const isUserExists = await User.findOne({ email: data?.email });
   if (isUserExists) {
     throw new AppError(
@@ -43,7 +42,13 @@ const updateProfile = async (payload: Partial<IUSER>, userToken: string) => {
   return res;
 };
 
+const getAlluser=async()=>{
+  const res=await User.find()
+  return res
+}
+
 export const userService = {
   createUserInFoDB,
   updateProfile,
+  getAlluser
 };
