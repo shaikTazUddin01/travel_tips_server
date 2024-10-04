@@ -8,8 +8,6 @@ const createFollowing = catchAsync(async (req, res) => {
   // check user exist or not
 
   const { userId } = req.user;
-//   console.log(userId);
-//   console.log(req.body);
   const result = await followingServer.createFollowing(req.body, userId);
 
   sendResponse(res, {
@@ -20,6 +18,21 @@ const createFollowing = catchAsync(async (req, res) => {
   });
 });
 
+const getMyFollowing = catchAsync(async (req, res) => {
+  // check user exist or not
+
+  const { userId } = req.user;
+  const result = await followingServer.getMyFollowing(userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "retrieve following",
+    data: result,
+  });
+});
+
 export const followingController = {
   createFollowing,
+  getMyFollowing
 };

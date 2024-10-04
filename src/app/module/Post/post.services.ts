@@ -24,19 +24,19 @@ const createPost = async (payload: IPost, user: string) => {
 
 // get all post
 const getAllPost = async (queryData:Record<string,string>|null) => {
-console.log(queryData);
+// console.log(queryData);
 let query:{tags?:string}={}
 if (queryData?.tags) {
   query.tags=queryData.tags
 }
-console.log(query);
+// console.log(query);
   const res = await Post.find(query).populate("user");
-  console.log(res);
+  // console.log(res);
   return res;
 };
 // get my post
 const getMyPost = async (userId: string) => {
-  console.log(userId);
+  // console.log(userId);
   const res = await Post.find({ user: userId }).populate("user");
   
   return res;

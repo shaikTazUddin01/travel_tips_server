@@ -2,6 +2,7 @@ import { IFollowers } from "../Followers/followers.interface";
 import { Follower } from "../Followers/followers.model";
 import { Following } from "./following.model";
 
+// create following
 const createFollowing = async (
   { following }: { following: string },
   userId: string
@@ -19,29 +20,29 @@ const createFollowing = async (
       { $addToSet: { following: following } },
       { new: true }
     );
-
+    // check already followes or not
     const existingFollowers = await Follower.findOne({ userId: following });
 
     if (!existingFollowers) {
-      await Follower.create({ userId: following ,followers: [userId] });
-    }else {
+      await Follower.create({ userId: following, followers: [userId] });
+    } else {
       await Follower.updateOne(
         { userId: following },
-        { $addToSet: { followers: userId } }
+        { $addToSet: { followers: userId } },
+        { new: true }
       );
     }
-
-
+   
     return res;
   }
 
   // create following first time
   const res = await Following.create(data);
-
+  // check already followes or not
   const existingFollowers = await Follower.findOne({ userId: following });
 
   if (!existingFollowers) {
-     await Follower.create({
+    await Follower.create({
       userId: following,
       followers: [userId],
     });
@@ -54,12 +55,18 @@ const createFollowing = async (
       { new: true }
     );
   }
+  return res;
+};
 
-  // console.log(followerData);
+// get my following
+
+const getMyFollowing = async (id: string) => {
+  const res = await Following.findOne({ userId: id }).populate('userId').populate('following');
 
   return res;
 };
 
 export const followingServer = {
   createFollowing,
+  getMyFollowing,
 };

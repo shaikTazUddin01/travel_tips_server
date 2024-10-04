@@ -3,6 +3,7 @@ import { authRouter } from '../module/Auth/auth.router'
 import { userRouter } from '../module/User/user.router'
 import { postRouter } from '../module/Post/post.router'
 import { followingRouter } from '../module/Following/following.router'
+import { followersRouter } from '../module/Followers/followers.router'
 
 const router = Router()
 
@@ -22,6 +23,10 @@ const modulesRoutes = [
   {
     path: '/following',
     pathRoute: followingRouter,
+  },
+  {
+    path: '/followers',
+    pathRoute: followersRouter,
   },
 ]
 
