@@ -47,8 +47,14 @@ const getAlluser=async()=>{
   return res
 }
 
+const getSingleUser=async(userId:string)=>{
+  const res=await User.findById(userId)
+  return res
+}
+
 export const userService = {
   createUserInFoDB,
   updateProfile,
-  getAlluser
+  getAlluser,
+  getSingleUser
 };
