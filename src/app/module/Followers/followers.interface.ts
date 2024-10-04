@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 
-export interface IFollow{
+export interface IFollowers{
     userId:Types.ObjectId;
-    following:string[];
+    followers:string[];
     // followers?:string[];
 }
 

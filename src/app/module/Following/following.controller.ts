@@ -1,16 +1,16 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { userService } from "../User/user.service";
-import { followServer } from "./follow.service";
+import { followingServer } from "./follow.service";
 
-const createFollow = catchAsync(async (req, res) => {
+
+const createFollowing = catchAsync(async (req, res) => {
   // check user exist or not
 
   const { userId } = req.user;
 //   console.log(userId);
 //   console.log(req.body);
-  const result = await followServer.createFollow(req.body, userId);
+  const result = await followingServer.createFollowing(req.body, userId);
 
   sendResponse(res, {
     success: true,
@@ -20,6 +20,6 @@ const createFollow = catchAsync(async (req, res) => {
   });
 });
 
-export const followController = {
-  createFollow,
+export const followingController = {
+  createFollowing,
 };
