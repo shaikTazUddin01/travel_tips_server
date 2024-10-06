@@ -23,12 +23,12 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 
 // get all post
 const getAllPost = async (queryData: Record<string, string> | null) => {
-  // console.log(queryData);
-  let query: { tags?: string } = {};
-  if (queryData?.tags) {
-    query.tags = queryData.tags;
+  console.log(queryData);
+  let query: { type?: string } = {};
+  if (queryData?.type) {
+    query.type = queryData.type;
   }
-  // console.log(query);
+  console.log(query);
   const res = await Post.find(query).populate("user");
   // console.log(res);
   return res;
@@ -50,6 +50,13 @@ const deletePost = async (id: string) => {
   const res = await Post.findByIdAndDelete(id);
   return res;
 };
+
+
+const upvote=async({userId,postId}:{userId:string,postId:string})=>{
+  
+}
+
+
 
 export const postServices = {
   createPost,

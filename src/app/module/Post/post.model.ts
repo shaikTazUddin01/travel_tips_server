@@ -9,7 +9,7 @@ const postSchema = new Schema<IPost>({
   },
   image: {
     type: String,
-    required: [true, 'Image is required.'],
+    // required: [true, 'Image is required.'],
   },
   category: {
     type: String,

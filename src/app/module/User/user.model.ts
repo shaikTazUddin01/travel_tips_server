@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { IUSER } from "./user.interface";
 import bcrypt from "bcrypt";
 import config from "../../config";
+import { defaultUserImage } from "../../constant/userRole";
 
 const userSchema = new Schema<IUSER>({
   name: { type: String, required: true },
@@ -9,7 +10,7 @@ const userSchema = new Schema<IUSER>({
   email: { type: String, required: true, unique: true },
   address: { type: String, required: true },
   password: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String, required: true,default:defaultUserImage },
   age: { type: Number, required: true },
   gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
   role: { type: String, enum: ["USER", "ADMIN"], required: true },
