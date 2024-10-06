@@ -6,7 +6,7 @@ export interface IPost {
     category:string;
     postContent: string;
     type:"Premium"|"Non-Premium";
-    like:number;
+    like:Types.ObjectId[];
     comment:number;
     share:number;
     isVerify:boolean

@@ -25,8 +25,9 @@ const postSchema = new Schema<IPost>({
     required: [true, 'Tags are required.'],
   },
   like: {
-    type: Number,
-    default: 0,
+    type: [Schema.Types.ObjectId],
+    default:[],
+    ref:'User'
   },
   comment: {
     type: Number,

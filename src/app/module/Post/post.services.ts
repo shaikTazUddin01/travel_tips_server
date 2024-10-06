@@ -52,9 +52,6 @@ const deletePost = async (id: string) => {
 };
 
 
-const upvote=async({userId,postId}:{userId:string,postId:string})=>{
-  
-}
 
 
 
