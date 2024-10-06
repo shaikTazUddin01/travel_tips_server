@@ -19,7 +19,7 @@ const postSchema = new Schema<IPost>({
     type: String,
     required: [true, 'Post content is required.'],
   },
-  tags: {
+  type: {
     type: String,
     enum: ["Premium", "Non-Premium"],
     required: [true, 'Tags are required.'],

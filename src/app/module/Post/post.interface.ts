@@ -5,7 +5,7 @@ export interface IPost {
     image: string;
     category:string;
     postContent: string;
-    tags:"Premium"|"Non-Premium";
+    type:"Premium"|"Non-Premium";
     like:number;
     comment:number;
     share:number;

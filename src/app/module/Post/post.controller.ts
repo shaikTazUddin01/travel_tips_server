@@ -5,7 +5,10 @@ import { postServices } from "./post.services";
 
 const createPost = catchAsync(async (req, res) => {
   const user = req.headers.authorization;
-  const result = await postServices.createPost(req.body, user as string);
+  const data =req?.body?.data
+  const file =req.file?.path
+  // console.log(data,file);
+  const result = await postServices.createPost(JSON.parse(data),file as string, user as string);
 
   sendResponse(res, {
     success: true,

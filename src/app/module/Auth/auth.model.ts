@@ -7,4 +7,4 @@ const authSchmema = new Schema<IAuth>({
   password: { type: String, required: true },
 })
 
-export const Auth = model<IAuth>('Auth', authSchmema)
+// export const Auth = model<IAuth>('Auth', authSchmema)

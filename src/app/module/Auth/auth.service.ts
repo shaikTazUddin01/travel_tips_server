@@ -16,7 +16,7 @@ const authLogin = async (data: IAuth) => {
       "You have no accout , Please sign up.."
     );
   }
-  console.log(isUserExists);
+  // console.log(isUserExists);
   // match password
   const ispasswordMatch = await bcrypt.compare(
     data?.password,

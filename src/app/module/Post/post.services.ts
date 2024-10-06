@@ -8,14 +8,14 @@ import { AppError } from "../../error/AppErrors";
 import httpStatus from "http-status";
 
 // create post
-const createPost = async (payload: IPost, user: string) => {
+const createPost = async (payload: IPost, file: string, user: string) => {
   const { userId } = decodedToken(user) as JwtPayload;
-
   const isUserExists = await User.findById(userId);
   if (!isUserExists) {
     throw new AppError(httpStatus.UNAUTHORIZED, "user not found");
   }
   payload.user = isUserExists?._id;
+  payload.image = file;
 
   const res = await Post.create(payload);
   return res;
@@ -56,5 +56,5 @@ export const postServices = {
   getAllPost,
   getMyPost,
   deletePost,
-  getSpecificUserPost
+  getSpecificUserPost,
 };
