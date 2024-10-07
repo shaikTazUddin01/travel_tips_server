@@ -27,34 +27,32 @@ const createUserInFoDB = async (data: IUSER, profileImage: string) => {
 };
 
 //update profile
-const updateProfile = async (payload: Partial<IUSER>, userToken: string) => {
-  const decoded = decodedToken(userToken) as JwtPayload;
-
-  // console.log(decoded);
-
-  if (!decoded) {
-    throw new AppError(httpStatus.UNAUTHORIZED, "you are not authorized");
-  }
-
-  const res = await User.findByIdAndUpdate(decoded?.userId, payload, {
+const updateProfile = async  (userId:string , payload: Partial<IUSER>) => {
+ 
+  const res = await User.updateOne({_id:userId}, payload, {
     new: true,
   });
   return res;
 };
 
-const getAlluser=async()=>{
-  const res=await User.find()
-  return res
-}
+const getAlluser = async () => {
+  const res = await User.find();
+  return res;
+};
 
-const getSingleUser=async(userId:string)=>{
-  const res=await User.findById(userId)
-  return res
-}
+const getSingleUser = async (userId: string) => {
+  const res = await User.findById(userId);
+  return res;
+};
 
+const deleteUser = async (userId: string) => {
+  const res = await User.deleteOne({ _id: userId });
+  return res;
+};
 export const userService = {
   createUserInFoDB,
   updateProfile,
   getAlluser,
-  getSingleUser
+  getSingleUser,
+  deleteUser,
 };

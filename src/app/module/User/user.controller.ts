@@ -25,13 +25,9 @@ const createUser = catchAsync(async (req, res) => {
 });
 // update user profile
 const updateUser = catchAsync(async (req, res) => {
-  const userToken=req.headers.authorization
-  // check user exist or not
-  if (!userToken) {
-    throw new AppError(httpStatus.UNAUTHORIZED,"you are not authorized")
-  }
+ const userId=req.params.id
 
-  const result = await userService.updateProfile(req.body,userToken as string);
+  const result = await userService.updateProfile(userId,req.body);
 
   sendResponse(res, {
     success: true,
@@ -43,7 +39,6 @@ const updateUser = catchAsync(async (req, res) => {
 // get all user profile
 const getAllUser = catchAsync(async (req, res) => {
  
-
   const result = await userService.getAlluser();
 
   sendResponse(res, {
@@ -65,10 +60,24 @@ const getSingleUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// delete user
+const deleteUser = catchAsync(async (req, res) => {
+  const userId=req?.params?.id
+  const result = await userService.deleteUser(userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "user delete success",
+    data: result,
+  });
+});
+
 
 export const userController = {
   createUser,
   updateUser,
   getAllUser,
-  getSingleUser
+  getSingleUser,
+  deleteUser
 };

@@ -64,10 +64,29 @@ const id=req.params.id
   });
 });
 
+
+
+// upvote and downvote system
+const upvoteToUser = catchAsync(async (req, res) => {
+  // check user exist or not
+
+  const { userId } = req.user;
+//   const postId = req.body;
+  const result = await postServices.upvoteToPost( userId, req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: result?.message,
+    data: result?.res,
+  });
+});
+
 export const postcontroller = {
   createPost,
   getAllPost,
   getMyAllPost,
   deletePost,
-  getSpecificUserPost 
+  getSpecificUserPost ,
+  upvoteToUser
 };

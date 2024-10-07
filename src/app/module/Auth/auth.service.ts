@@ -36,6 +36,7 @@ const authLogin = async (data: IAuth) => {
     role:isUserExists?.role,
     phoneNumber: isUserExists?.phoneNumber,
     image: isUserExists?.image,
+    isVerify:isUserExists?.isVerify
   };
   // create token
   const accessToken = jwt.sign(

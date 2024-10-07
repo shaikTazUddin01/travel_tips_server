@@ -13,4 +13,8 @@ export default {
   cloudinary_name:process.env.CLOUDINARY_NAME,
   cloudinary_api:process.env.CLOUDINARY_API_KEY,
   cloudinary_secret:process.env.CLOUDINARY_API_SECRET,
+  store_id:process.env.STORE_ID,
+  signature_key:process.env.SIGNETURE_KEY,
+  payment_Url:process.env.PAYMENT_URL,
+  verify_payment_url:process.env.VERIFY_PAYMENT_URL
 };

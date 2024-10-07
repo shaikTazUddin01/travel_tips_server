@@ -4,7 +4,8 @@ import { userRouter } from '../module/User/user.router'
 import { postRouter } from '../module/Post/post.router'
 import { followingRouter } from '../module/Following/following.router'
 import { followersRouter } from '../module/Followers/followers.router'
-import { upvoteRouter } from '../module/upvote&downvote/upDo.router'
+import { verifyUserRoutes } from '../module/Verify/verify.router'
+import { paymentRouter } from '../utils/payment/paymant.router'
 
 const router = Router()
 
@@ -30,9 +31,14 @@ const modulesRoutes = [
     pathRoute: followersRouter,
   },
   {
-    path: '/upvote',
-    pathRoute: upvoteRouter,
+    path: '/verifyAccount',
+    pathRoute: verifyUserRoutes,
   },
+  {
+    path: '/payment',
+    pathRoute: paymentRouter,
+  },
+
 ]
 
 modulesRoutes.forEach(route => router.use(route?.path, route?.pathRoute))

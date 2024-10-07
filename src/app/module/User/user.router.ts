@@ -8,8 +8,9 @@ import { multerUpload } from '../../config/multer.config'
 const router = Router()
 
 router.post('/',multerUpload.single('image'),userController.createUser)
-router.post('/updateProfile',userController.updateUser)
+router.patch('/updateUserProfile/:id',userController.updateUser)
 router.get('/getUsers',auth("USER","ADMIN"),userController.getAllUser)
 router.get('/getSingleUser/:id',auth("USER","ADMIN"),userController.getSingleUser)
+router.delete('/deleteUser/:id',auth("ADMIN"),userController.deleteUser)
 
 export const userRouter = router
