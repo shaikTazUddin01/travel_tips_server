@@ -1,6 +1,21 @@
 import { Schema, model, Types } from "mongoose";
 import { IPost } from "./post.interface";
 
+const commentSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "UserId is required."],
+  },
+  comment: {
+    type: String,
+    required: [true, "Comment is required."],
+  },
+});
+
+
+
+
 const postSchema = new Schema<IPost>(
   {
     user: {
@@ -31,8 +46,8 @@ const postSchema = new Schema<IPost>(
       ref: "User",
     },
     comment: {
-      type: Number,
-      default: 0,
+      type: [commentSchema],
+      default: [],
     },
     share: {
       type: Number,

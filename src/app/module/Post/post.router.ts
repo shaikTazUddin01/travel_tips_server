@@ -14,5 +14,6 @@ router.get("/getSpecificUserPost/:id",auth("USER","ADMIN") ,postcontroller.getSp
 router.delete("/delete-post/:id",auth("USER","ADMIN") ,postcontroller.deletePost);
 router.post("/upvoteDownvote",auth("USER","ADMIN") ,postcontroller.upvoteToUser);
 router.patch("/updatePost",auth("USER","ADMIN") ,postcontroller.updatePost);
+router.post("/comment",auth("USER","ADMIN") ,postcontroller.commentToPost);
 
 export const postRouter = router;

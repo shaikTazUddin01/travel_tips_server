@@ -23,13 +23,15 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 
 // get all post
 const getAllPost = async (queryData: Record<string, string> | null) => {
-  console.log(queryData);
+  // console.log(queryData);
   let query: { type?: string } = {};
   if (queryData?.type) {
     query.type = queryData.type;
   }
-  console.log(query);
-  const res = await Post.find(query).populate("user");
+  // console.log(query);
+  const res = await Post.find(query).populate("user").populate({
+    path:'comment.userId'
+  });
   // console.log(res);
   return res;
 };
@@ -98,6 +100,22 @@ const updatepost= async  (payload:any) => {
   return res;
 };
 
+// comment to post 
+const commentToPost =async(userId:string,payload:any)=>{
+  const postId=payload?.postId;
+  const newComment={
+    userId:userId,
+    comment:payload.comment
+  }
+  
+  const res = await Post.updateOne({_id:postId},{
+    $addToSet:{comment:newComment}
+  },{new:true})
+
+  console.log(res);
+
+  return res
+}
 
 export const postServices = {
   createPost,
@@ -106,5 +124,6 @@ export const postServices = {
   deletePost,
   getSpecificUserPost,
   upvoteToPost,
-  updatepost
+  updatepost,
+  commentToPost
 };
