@@ -13,5 +13,6 @@ router.get("/my-post",auth("USER","ADMIN") ,postcontroller.getMyAllPost);
 router.get("/getSpecificUserPost/:id",auth("USER","ADMIN") ,postcontroller.getSpecificUserPost);
 router.delete("/delete-post/:id",auth("USER","ADMIN") ,postcontroller.deletePost);
 router.post("/upvoteDownvote",auth("USER","ADMIN") ,postcontroller.upvoteToUser);
+router.patch("/updatePost",auth("USER","ADMIN") ,postcontroller.updatePost);
 
 export const postRouter = router;

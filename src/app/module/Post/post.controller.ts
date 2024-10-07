@@ -5,10 +5,14 @@ import { postServices } from "./post.services";
 
 const createPost = catchAsync(async (req, res) => {
   const user = req.headers.authorization;
-  const data =req?.body?.data
-  const file =req.file?.path
-  // console.log(data,file);
-  const result = await postServices.createPost(JSON.parse(data),file as string, user as string);
+  const data = req?.body?.data;
+  const file = req.file?.path;
+  console.log(data, file);
+  const result = await postServices.createPost(
+    JSON.parse(data),
+    file as string,
+    user as string
+  );
 
   sendResponse(res, {
     success: true,
@@ -18,7 +22,9 @@ const createPost = catchAsync(async (req, res) => {
   });
 });
 const getAllPost = catchAsync(async (req, res) => {
-  const result = await postServices.getAllPost(req.query as Record<string,string>);
+  const result = await postServices.getAllPost(
+    req.query as Record<string, string>
+  );
 
   sendResponse(res, {
     success: true,
@@ -29,7 +35,7 @@ const getAllPost = catchAsync(async (req, res) => {
 });
 const getMyAllPost = catchAsync(async (req, res) => {
   const { userId } = req.user;
-//   console.log(userId);
+  //   console.log(userId);
   const result = await postServices.getMyPost(userId);
 
   sendResponse(res, {
@@ -41,8 +47,8 @@ const getMyAllPost = catchAsync(async (req, res) => {
 });
 // GET SEecific user post
 const getSpecificUserPost = catchAsync(async (req, res) => {
-  const userId=req.params.id
-//   console.log(userId);
+  const userId = req.params.id;
+  //   console.log(userId);
   const result = await postServices.getSpecificUserPost(userId);
   sendResponse(res, {
     success: true,
@@ -52,8 +58,7 @@ const getSpecificUserPost = catchAsync(async (req, res) => {
   });
 });
 const deletePost = catchAsync(async (req, res) => {
-  
-const id=req.params.id
+  const id = req.params.id;
   const result = await postServices.deletePost(id);
 
   sendResponse(res, {
@@ -64,15 +69,13 @@ const id=req.params.id
   });
 });
 
-
-
 // upvote and downvote system
 const upvoteToUser = catchAsync(async (req, res) => {
   // check user exist or not
 
   const { userId } = req.user;
-//   const postId = req.body;
-  const result = await postServices.upvoteToPost( userId, req.body);
+  //   const postId = req.body;
+  const result = await postServices.upvoteToPost(userId, req.body);
 
   sendResponse(res, {
     success: true,
@@ -82,11 +85,25 @@ const upvoteToUser = catchAsync(async (req, res) => {
   });
 });
 
+// update post
+const updatePost = catchAsync(async (req, res) => {
+  // console.log(req.body);
+  const result = await postServices.updatepost(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post update success",
+    data: result,
+  });
+});
+
 export const postcontroller = {
   createPost,
   getAllPost,
   getMyAllPost,
   deletePost,
-  getSpecificUserPost ,
-  upvoteToUser
+  getSpecificUserPost,
+  upvoteToUser,
+  updatePost,
 };

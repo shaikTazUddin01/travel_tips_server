@@ -89,6 +89,14 @@ const upvoteToPost = async (
   return null;
 };
 
+//update post
+const updatepost= async  (payload:any) => {
+ console.log(payload.updateInFo);
+  const res = await Post.updateOne({_id:payload?.id}, payload.updateInFo, {
+    new: true,
+  });
+  return res;
+};
 
 
 export const postServices = {
@@ -97,5 +105,6 @@ export const postServices = {
   getMyPost,
   deletePost,
   getSpecificUserPost,
-  upvoteToPost
+  upvoteToPost,
+  updatepost
 };
