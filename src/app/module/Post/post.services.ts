@@ -24,11 +24,17 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 // get all post
 const getAllPost = async (queryData: Record<string, string> | null) => {
   // console.log(queryData);
-  let query: { type?: string } = {};
-  if (queryData?.type) {
-    query.type = queryData.type;
+  let query: { type?: string;category?:string;name?:any} = {};
+  if (queryData?.type !="null") {
+    query.type = queryData?.type;
   }
-  // console.log(query);
+  if (queryData?.category !="null") {
+    query.category = queryData?.category;
+  }
+  if (queryData?.search !="null") {
+    query.name = {$regex:queryData?.search,$options:"i"};
+  }
+  console.log("query-->",query);
   const res = await Post.find(query).populate("user").populate({
     path: "comment.userId",
   });
@@ -148,13 +154,13 @@ const UpdateComment = async (
   const { postId, commentId, comment } = payload;
 
   const isPostExists = await Post.findOne({ _id: postId });
-// console.log(isPostExists);
+  // console.log(isPostExists);
   if (!isPostExists) {
     throw new AppError(httpStatus.NOT_FOUND, "the post is not exists");
   }
   const res = await Post.updateOne(
-    { _id: postId, "comment._id": commentId, "comment.userId": userId  },
-    { $set:{"comment.$.comment":comment} }
+    { _id: postId, "comment._id": commentId, "comment.userId": userId },
+    { $set: { "comment.$.comment": comment } }
   );
   return res;
 };
@@ -169,5 +175,5 @@ export const postServices = {
   updatepost,
   commentToPost,
   deleteComment,
-  UpdateComment
+  UpdateComment,
 };
