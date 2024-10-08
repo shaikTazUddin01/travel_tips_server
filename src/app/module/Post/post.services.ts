@@ -30,7 +30,7 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
   }
   // console.log(query);
   const res = await Post.find(query).populate("user").populate({
-    path:'comment.userId'
+    path: "comment.userId",
   });
   // console.log(res);
   return res;
@@ -58,11 +58,9 @@ const upvoteToPost = async (
   userId: string,
   payload: Record<string, string>
 ) => {
- 
   const { postId } = payload;
 
-  
-//   check post exists or not
+  //   check post exists or not
   const isPostExists = await Post.findById(postId);
   if (isPostExists) {
     // check is already upvoted or not
@@ -75,7 +73,7 @@ const upvoteToPost = async (
         },
         { new: true }
       );
-      return {res,message:"downvote"};
+      return { res, message: "downvote" };
     }
 
     const res = await Post.updateOne(
@@ -86,36 +84,62 @@ const upvoteToPost = async (
       { new: true }
     );
 
-    return {res,message:"upvote"};
+    return { res, message: "upvote" };
   }
   return null;
 };
 
 //update post
-const updatepost= async  (payload:any) => {
- console.log(payload.updateInFo);
-  const res = await Post.updateOne({_id:payload?.id}, payload.updateInFo, {
+const updatepost = async (payload: any) => {
+  console.log(payload.updateInFo);
+  const res = await Post.updateOne({ _id: payload?.id }, payload.updateInFo, {
     new: true,
   });
   return res;
 };
 
-// comment to post 
-const commentToPost =async(userId:string,payload:any)=>{
-  const postId=payload?.postId;
-  const newComment={
-    userId:userId,
-    comment:payload.comment
-  }
-  
-  const res = await Post.updateOne({_id:postId},{
-    $addToSet:{comment:newComment}
-  },{new:true})
+// comment to post
+const commentToPost = async (userId: string, payload: any) => {
+  const postId = payload?.postId;
+  const newComment = {
+    userId: userId,
+    comment: payload.comment,
+  };
+
+  const res = await Post.updateOne(
+    { _id: postId },
+    {
+      $addToSet: { comment: newComment },
+    },
+    { new: true }
+  );
 
   console.log(res);
 
+  return res;
+};
+// delete comment
+const deleteComment = async (
+  payload: Record<string, string>,
+  userId: string
+) => {
+  // console.log(payload);
+  // console.log(userId);
+  const { postId, commentId } = payload;
+  // console.log(postId, commentId, userId);
+  const isPostExists = await Post.findOne({ _id: postId });
+
+  if (!isPostExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "the item is not exists");
+  }
+  const res = await Post.updateOne(
+    { _id: postId },
+    { $pull: { comment: { _id: commentId, userId: userId } } }
+  );
+console.log(res);
   return res
-}
+
+};
 
 export const postServices = {
   createPost,
@@ -125,5 +149,6 @@ export const postServices = {
   getSpecificUserPost,
   upvoteToPost,
   updatepost,
-  commentToPost
+  commentToPost,
+  deleteComment,
 };

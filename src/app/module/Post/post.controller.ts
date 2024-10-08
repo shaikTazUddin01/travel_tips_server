@@ -97,7 +97,7 @@ const updatePost = catchAsync(async (req, res) => {
     data: result,
   });
 });
-// update post
+// post a  comment
 const commentToPost = catchAsync(async (req, res) => {
   const {userId}=req.user
   // console.log(req.body);
@@ -110,6 +110,20 @@ const commentToPost = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// delete comment
+const deleteComment = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  // console.log(req.body);
+  const result = await postServices.deleteComment(req.body,userId);
+// console.log(userId);
+// console.log(req.body);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "comment deleting",
+    data: result,
+  });
+});
 
 export const postcontroller = {
   createPost,
@@ -119,5 +133,6 @@ export const postcontroller = {
   getSpecificUserPost,
   upvoteToUser,
   updatePost,
-  commentToPost
+  commentToPost,
+  deleteComment
 };

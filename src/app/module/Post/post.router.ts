@@ -15,5 +15,6 @@ router.delete("/delete-post/:id",auth("USER","ADMIN") ,postcontroller.deletePost
 router.post("/upvoteDownvote",auth("USER","ADMIN") ,postcontroller.upvoteToUser);
 router.patch("/updatePost",auth("USER","ADMIN") ,postcontroller.updatePost);
 router.post("/comment",auth("USER","ADMIN") ,postcontroller.commentToPost);
+router.delete("/comment",auth("USER","ADMIN") ,postcontroller.deleteComment);
 
 export const postRouter = router;
