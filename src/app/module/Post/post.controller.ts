@@ -113,14 +113,24 @@ const commentToPost = catchAsync(async (req, res) => {
 // delete comment
 const deleteComment = catchAsync(async (req, res) => {
   const {userId}=req.user
-  // console.log(req.body);
   const result = await postServices.deleteComment(req.body,userId);
-// console.log(userId);
-// console.log(req.body);
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "comment deleting",
+    data: result,
+  });
+});
+// update comment
+const updateComment = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await postServices.UpdateComment(req.body,userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "comment updating",
     data: result,
   });
 });
@@ -134,5 +144,6 @@ export const postcontroller = {
   upvoteToUser,
   updatePost,
   commentToPost,
-  deleteComment
+  deleteComment,
+  updateComment
 };

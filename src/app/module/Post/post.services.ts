@@ -114,7 +114,7 @@ const commentToPost = async (userId: string, payload: any) => {
     { new: true }
   );
 
-  console.log(res);
+  // console.log(res);
 
   return res;
 };
@@ -130,15 +130,33 @@ const deleteComment = async (
   const isPostExists = await Post.findOne({ _id: postId });
 
   if (!isPostExists) {
-    throw new AppError(httpStatus.NOT_FOUND, "the item is not exists");
+    throw new AppError(httpStatus.NOT_FOUND, "the post is not exists");
   }
   const res = await Post.updateOne(
     { _id: postId },
-    { $pull: { comment: { _id: commentId, userId: userId } } }
+    { $pull: { comment: { _id: commentId, userId: userId } } },
+    { new: true }
   );
-console.log(res);
-  return res
+  return res;
+};
+// update comment
+const UpdateComment = async (
+  payload: Record<string, string>,
+  userId: string
+) => {
+  // console.log(payload);
+  const { postId, commentId, comment } = payload;
 
+  const isPostExists = await Post.findOne({ _id: postId });
+// console.log(isPostExists);
+  if (!isPostExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "the post is not exists");
+  }
+  const res = await Post.updateOne(
+    { _id: postId, "comment._id": commentId, "comment.userId": userId  },
+    { $set:{"comment.$.comment":comment} }
+  );
+  return res;
 };
 
 export const postServices = {
@@ -151,4 +169,5 @@ export const postServices = {
   updatepost,
   commentToPost,
   deleteComment,
+  UpdateComment
 };
