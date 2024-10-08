@@ -13,9 +13,6 @@ const createUser = catchAsync(async (req, res) => {
   const file=req?.file?.path
   // console.log(JSON.parse(data));
   const result = await userService.createUserInFoDB(JSON.parse(data),file as string);
-
- 
-
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -26,9 +23,7 @@ const createUser = catchAsync(async (req, res) => {
 // update user profile
 const updateUser = catchAsync(async (req, res) => {
  const userId=req.params.id
-
   const result = await userService.updateProfile(userId,req.body);
-
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -74,10 +69,29 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 
+// update profile image
+const updateProfileImage = catchAsync(async (req, res) => {
+ 
+  const file=req?.file?.path
+  const {userId}=req?.user
+  console.log(userId);
+  console.log(file);
+  
+  // console.log(JSON.parse(data));
+  const result = await userService.updateProfileImage(userId,file as string);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "image update success",
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
   updateUser,
   getAllUser,
   getSingleUser,
-  deleteUser
+  deleteUser,
+  updateProfileImage
 };

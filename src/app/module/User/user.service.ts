@@ -49,10 +49,21 @@ const deleteUser = async (userId: string) => {
   const res = await User.deleteOne({ _id: userId });
   return res;
 };
+
+
+// update Profile image
+const updateProfileImage = async (userId:string, profileImage: string) => {
+  const res = await User.updateOne({_id:userId},{image:profileImage});
+  return res;
+  // return res
+};
+
+
 export const userService = {
   createUserInFoDB,
   updateProfile,
   getAlluser,
   getSingleUser,
   deleteUser,
+  updateProfileImage
 };

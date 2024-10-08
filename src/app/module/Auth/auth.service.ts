@@ -35,6 +35,9 @@ const authLogin = async (data: IAuth) => {
     name: isUserExists?.name,
     role:isUserExists?.role,
     phoneNumber: isUserExists?.phoneNumber,
+    address:isUserExists?.address,
+    gender:isUserExists?.gender,
+    age:isUserExists?.age,
     image: isUserExists?.image,
     isVerify:isUserExists?.isVerify
   };
