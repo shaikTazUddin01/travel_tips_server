@@ -16,7 +16,7 @@ export const initiatePayment = async (paymentData:any) => {
     cus_email: paymentData?.customerEmail,
     cus_add1: paymentData?.customerAddress,
     cus_country: "Bangladesh",
-    cus_phone: "+8801704",
+    cus_phone: paymentData?.customerPhone,
     user_id:paymentData?.userId,
     type: "json",
   });

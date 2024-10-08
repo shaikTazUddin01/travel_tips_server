@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import { verifyService } from './verify.service';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 // import { orderService } from './order.service';
 
-export const createVerifyController = async (req: Request, res: Response) => {
+ const createVerifyController = async (req: Request, res: Response) => {
     try {
         // const paymentAmount = req.body;
         const {userId}=req.user
@@ -20,3 +23,21 @@ export const createVerifyController = async (req: Request, res: Response) => {
         });
     }
 };
+
+// get all verify info
+const getAllVerifyInFo = catchAsync(async (req, res) => {
+ 
+    const result = await verifyService.getAllVerifyfromDB();
+  
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "retrieve success",
+      data: result,
+    });
+  });
+
+export const verifyController={
+    createVerifyController,
+    getAllVerifyInFo
+}

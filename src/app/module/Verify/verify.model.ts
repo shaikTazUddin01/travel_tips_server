@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, model } from "mongoose";
 import { IVerify } from "./verify.interface";
 
 const verifySchema: Schema = new Schema<IVerify>(
@@ -20,4 +20,4 @@ const verifySchema: Schema = new Schema<IVerify>(
   }
 );
 
-export default mongoose.model<IVerify>("Verify", verifySchema);
+export const VerifyModel = model<IVerify>("Verify", verifySchema);

@@ -1,5 +1,6 @@
 import { User } from "../../module/User/user.model";
-import verifyModel from "../../module/Verify/verify.model";
+import { VerifyModel } from "../../module/Verify/verify.model";
+// import verifyModel from "../../module/Verify/verify.model";
 import { verifyPayment } from "./payment.utils";
 
 const confirmationServices = async (payload: Record<string, string>) => {
@@ -16,7 +17,7 @@ const confirmationServices = async (payload: Record<string, string>) => {
       date: verifyStatus?.date,
     };
 
-    const res: any = await verifyModel.create(paymentInFo);
+    const res: any = await VerifyModel.create(paymentInFo);
 
     if (res) {
       await User.findByIdAndUpdate(res?.user, { isVerify: true });
