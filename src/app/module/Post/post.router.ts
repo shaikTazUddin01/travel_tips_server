@@ -17,5 +17,6 @@ router.patch("/updatePost",auth("USER","ADMIN") ,postcontroller.updatePost);
 router.post("/comment",auth("USER","ADMIN") ,postcontroller.commentToPost);
 router.delete("/comment",auth("USER","ADMIN") ,postcontroller.deleteComment);
 router.patch("/comment",auth("USER","ADMIN") ,postcontroller.updateComment);
+router.get("/getSinglePost/:id",auth("USER","ADMIN") ,postcontroller.getSinglePost);
 
 export const postRouter = router;

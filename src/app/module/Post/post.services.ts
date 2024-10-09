@@ -37,7 +37,7 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 //   if (queryData?.search && queryData.search !== "null") {
 //     query.name = { $regex: queryData.search, $options: "i" };
 //   }
-  
+
 //   // handle sorting
 //   if (queryData?.sorting == "asc") {
 //     sorting.sort = { "like.length": 1 };
@@ -58,9 +58,9 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 
 const getAllPost = async (queryData: Record<string, string> | null) => {
   try {
-    let query: { type?: string; category?: string; name?: any } = {};
-    
+    let query: { type?: string; category?: string; postContent?: any } = {};
 
+    console.log(queryData);
     // Handle filter conditions based on queryData
     if (queryData?.type && queryData.type !== "null") {
       query.type = queryData.type;
@@ -68,37 +68,35 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
     if (queryData?.category && queryData.category !== "null") {
       query.category = queryData.category;
     }
-    if (queryData?.search && queryData.search !== "null") {
-      query.name = { $regex: queryData.search, $options: "i" };
+    if (
+      queryData?.search &&
+      queryData.search !== "null" &&
+      queryData.search !== null &&
+      queryData.search.trim() !== ""
+    ) {
+      query.postContent = { $regex: queryData.search, $options: "i" };
     }
 
-  
-    let posts = await Post.find(query).sort({createdAt:-1})
+    let posts = await Post.find(query)
+      .sort({ createdAt: -1 })
       .populate("user")
       .populate({
         path: "comment.userId",
       });
 
-  //handle sorting 
+    //handle sorting
     if (queryData?.sorting === "dsc") {
-      posts = posts.sort((a: any, b: any) => a.like.length - b.like.length); 
+      posts = posts.sort((a: any, b: any) => a.like.length - b.like.length);
     } else if (queryData?.sorting === "asc") {
-      posts = posts.sort((a: any, b: any) => b.like.length - a.like.length); 
+      posts = posts.sort((a: any, b: any) => b.like.length - a.like.length);
     }
 
     return posts;
   } catch (error) {
     console.error("Error fetching posts:", error);
-    throw error; 
+    throw error;
   }
 };
-
-
-
-
-
-
-
 
 // get my post
 const getMyPost = async (userId: string) => {
@@ -224,6 +222,19 @@ const UpdateComment = async (
   return res;
 };
 
+// single post
+const getSinglePost = async (
+  postId :string) => {
+  // console.log(payload);
+  const res=await Post.findById(postId).populate("user")
+  .populate({
+    path: "comment.userId",
+  });
+  return res;
+};
+
+
+
 export const postServices = {
   createPost,
   getAllPost,
@@ -235,4 +246,5 @@ export const postServices = {
   commentToPost,
   deleteComment,
   UpdateComment,
+  getSinglePost
 };

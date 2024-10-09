@@ -134,6 +134,18 @@ const updateComment = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// get single post
+const getSinglePost = catchAsync(async (req, res) => {
+  const {id}=req.params
+  const result = await postServices.getSinglePost(id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post retrieve success",
+    data: result,
+  });
+});
 
 export const postcontroller = {
   createPost,
@@ -145,5 +157,6 @@ export const postcontroller = {
   updatePost,
   commentToPost,
   deleteComment,
-  updateComment
+  updateComment,
+  getSinglePost
 };
