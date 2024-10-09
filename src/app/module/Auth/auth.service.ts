@@ -82,7 +82,7 @@ const changePassword=async(payload:Record<string,any>)=>{
   return res
 }
 
-const formatePassword=async(payload:Record<string,any>)=>{
+const forgotPassword=async(payload:Record<string,any>)=>{
 // console.log(payload);
   const isUserExists=await User.findOne({email:payload?.email})
 
@@ -92,7 +92,7 @@ const formatePassword=async(payload:Record<string,any>)=>{
 
 
   const res= await User.updateOne({email:isUserExists?.email},{password:payload?.newPassword},{new:true})
-console.log(res);
+// console.log(res);
   return res
 }
 
@@ -100,5 +100,5 @@ console.log(res);
 export const authService = {
   authLogin,
   changePassword,
-  formatePassword
+  forgotPassword
 };

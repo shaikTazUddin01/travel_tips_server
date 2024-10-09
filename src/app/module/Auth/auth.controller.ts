@@ -29,10 +29,8 @@ const changePassword = catchAsync(async (req, res) => {
     data: result,
   });
 });
-const formatePassword = catchAsync(async (req, res) => {
-  const result = await authService.formatePassword(req.body);
-
-  
+const forgotPassword = catchAsync(async (req, res) => {
+  const result = await authService.forgotPassword(req.body);
 
   sendResponse(res, {
     success: true,
@@ -45,5 +43,5 @@ const formatePassword = catchAsync(async (req, res) => {
 export const authController = {
   login,
   changePassword,
-  formatePassword
+  forgotPassword
 };
