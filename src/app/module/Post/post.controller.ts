@@ -59,7 +59,9 @@ const getSpecificUserPost = catchAsync(async (req, res) => {
 });
 const deletePost = catchAsync(async (req, res) => {
   const id = req.params.id;
-  const result = await postServices.deletePost(id);
+  const{userId}=req.user
+
+  const result = await postServices.deletePost(userId,id);
 
   sendResponse(res, {
     success: true,
@@ -88,13 +90,16 @@ const upvoteToUser = catchAsync(async (req, res) => {
 // update post
 const updatePost = catchAsync(async (req, res) => {
   // console.log(req.body);
-  const result = await postServices.updatepost(req.body);
+  const {userId}=req.user
+  const postId=req.params.id
+ 
+  const result = await postServices.updatepost(req.body,userId,postId);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "post update success",
-    data: result,
+    data: null,
   });
 });
 // post a  comment

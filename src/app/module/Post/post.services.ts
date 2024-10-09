@@ -111,8 +111,10 @@ const getSpecificUserPost = async (userId: string) => {
   return res;
 };
 // delete post
-const deletePost = async (id: string) => {
-  const res = await Post.findByIdAndDelete(id);
+const deletePost = async (userId: string, id: string) => {
+  // console.log(userId,id);
+  const res = await Post.deleteOne({ _id: id, user: userId });
+  console.log(res);
   return res;
 };
 
@@ -153,9 +155,9 @@ const upvoteToPost = async (
 };
 
 //update post
-const updatepost = async (payload: any) => {
-  console.log(payload.updateInFo);
-  const res = await Post.updateOne({ _id: payload?.id }, payload.updateInFo, {
+const updatepost = async (payload: any,userId:string,postId:string) => {
+  // console.log(payload.updateInFo);
+  const res = await Post.updateOne({ _id: postId ,user:userId}, payload, {
     new: true,
   });
   return res;
@@ -223,17 +225,13 @@ const UpdateComment = async (
 };
 
 // single post
-const getSinglePost = async (
-  postId :string) => {
+const getSinglePost = async (postId: string) => {
   // console.log(payload);
-  const res=await Post.findById(postId).populate("user")
-  .populate({
+  const res = await Post.findById(postId).populate("user").populate({
     path: "comment.userId",
   });
   return res;
 };
-
-
 
 export const postServices = {
   createPost,
@@ -246,5 +244,5 @@ export const postServices = {
   commentToPost,
   deleteComment,
   UpdateComment,
-  getSinglePost
+  getSinglePost,
 };
