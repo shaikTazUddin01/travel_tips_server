@@ -61,7 +61,7 @@ const authLogin = async (data: IAuth) => {
 
 
 const changePassword=async(payload:Record<string,any>)=>{
-console.log(payload);
+// console.log(payload);
   const isUserExists=await User.findOne({email:payload?.email})
 
   if (!isUserExists) {
@@ -82,8 +82,23 @@ console.log(payload);
   return res
 }
 
+const formatePassword=async(payload:Record<string,any>)=>{
+// console.log(payload);
+  const isUserExists=await User.findOne({email:payload?.email})
+
+  if (!isUserExists) {
+    throw new AppError(httpStatus.NOT_FOUND,"the user is not exists plese sign up ")
+  }
+
+
+  const res= await User.updateOne({email:isUserExists?.email},{password:payload?.newPassword},{new:true})
+console.log(res);
+  return res
+}
+
 
 export const authService = {
   authLogin,
-  changePassword
+  changePassword,
+  formatePassword
 };
