@@ -21,26 +21,85 @@ const createPost = async (payload: IPost, file: string, user: string) => {
   return res;
 };
 
-// get all post
+// // get all post
+// const getAllPost = async (queryData: Record<string, string> | null) => {
+//   let sorting : { sort: any } = {sort:{ createdAt: -1 }};
+//   let query: { type?: string; category?: string; name?: any } = {};
+//   // default sort
+//   console.log(queryData);
+// // handle filter
+//   if (queryData?.type && queryData.type !== "null") {
+//     query.type = queryData.type;
+//   }
+//   if (queryData?.category && queryData.category !== "null") {
+//     query.category = queryData.category;
+//   }
+//   if (queryData?.search && queryData.search !== "null") {
+//     query.name = { $regex: queryData.search, $options: "i" };
+//   }
+  
+//   // handle sorting
+//   if (queryData?.sorting == "asc") {
+//     sorting.sort = { "like.length": 1 };
+//   }
+//   if (queryData?.sorting == "dsc") {
+//     sorting.sort = { "like.length": -1 };
+//   }
+//   console.log("query-->",sorting.sort);
+//   const res = await Post.find(query)
+//     .sort(sorting.sort)
+//     .populate("user")
+//     .populate({
+//       path: "comment.userId",
+//     });
+//   // console.log(res);
+//   return res;
+// };
+
 const getAllPost = async (queryData: Record<string, string> | null) => {
-  // console.log(queryData);
-  let query: { type?: string;category?:string;name?:any} = {};
-  if (queryData?.type !="null") {
-    query.type = queryData?.type;
+  try {
+    let query: { type?: string; category?: string; name?: any } = {};
+    
+
+    // Handle filter conditions based on queryData
+    if (queryData?.type && queryData.type !== "null") {
+      query.type = queryData.type;
+    }
+    if (queryData?.category && queryData.category !== "null") {
+      query.category = queryData.category;
+    }
+    if (queryData?.search && queryData.search !== "null") {
+      query.name = { $regex: queryData.search, $options: "i" };
+    }
+
+  
+    let posts = await Post.find(query).sort({createdAt:-1})
+      .populate("user")
+      .populate({
+        path: "comment.userId",
+      });
+
+  //handle sorting 
+    if (queryData?.sorting === "dsc") {
+      posts = posts.sort((a: any, b: any) => a.like.length - b.like.length); 
+    } else if (queryData?.sorting === "asc") {
+      posts = posts.sort((a: any, b: any) => b.like.length - a.like.length); 
+    }
+
+    return posts;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error; 
   }
-  if (queryData?.category !="null") {
-    query.category = queryData?.category;
-  }
-  if (queryData?.search !="null") {
-    query.name = {$regex:queryData?.search,$options:"i"};
-  }
-  console.log("query-->",query);
-  const res = await Post.find(query).populate("user").populate({
-    path: "comment.userId",
-  });
-  // console.log(res);
-  return res;
 };
+
+
+
+
+
+
+
+
 // get my post
 const getMyPost = async (userId: string) => {
   // console.log(userId);
