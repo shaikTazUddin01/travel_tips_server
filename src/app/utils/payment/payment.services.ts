@@ -20,7 +20,7 @@ const confirmationServices = async (payload: Record<string, string>) => {
     const res: any = await VerifyModel.create(paymentInFo);
 
     if (res) {
-      await User.findByIdAndUpdate(res?.user, { isVerify: true });
+      await User.findByIdAndUpdate(res?.user, { isVerify: true },{new:true});
     }
     return `<h1>payment success</h1>`;
   }

@@ -59,6 +59,8 @@ const updateProfileImage = async (userId:string, profileImage: string) => {
 };
 
 
+
+
 export const userService = {
   createUserInFoDB,
   updateProfile,

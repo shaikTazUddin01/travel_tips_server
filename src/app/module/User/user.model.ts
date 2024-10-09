@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, UpdateQuery } from "mongoose";
 import { IUSER } from "./user.interface";
 import bcrypt from "bcrypt";
 import config from "../../config";
@@ -21,7 +21,19 @@ const userSchema = new Schema<IUSER>({
 
 userSchema.pre("save", async function (next) {
   const user = this;
+  // console.log('--------------->>>>>----');
   user.password = await bcrypt.hash(user?.password, Number(config.saltRounds));
+  next();
+});
+
+// Pre-update middleware for hashing password when updating
+userSchema.pre("updateOne", async function (next) {
+  const update = this.getUpdate() as UpdateQuery<IUSER>;
+
+  if (update?.password) {
+    update.password = await bcrypt.hash(update.password, Number(config.saltRounds));
+  }
+
   next();
 });
 

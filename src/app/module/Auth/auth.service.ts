@@ -59,6 +59,31 @@ const authLogin = async (data: IAuth) => {
   };
 };
 
+
+const changePassword=async(payload:Record<string,any>)=>{
+console.log(payload);
+  const isUserExists=await User.findOne({email:payload?.email})
+
+  if (!isUserExists) {
+    throw new AppError(httpStatus.NOT_FOUND,"please enter with right information")
+  }
+// console.log("user->",isUserExists);
+  const ispasswordMatch = await bcrypt.compare(
+    payload?.password,
+    isUserExists?.password
+  );
+  // console.log(ispasswordMatch);
+  if (!ispasswordMatch) {
+    throw new AppError(httpStatus.NOT_FOUND,"please enter with right information")
+  }
+
+  const res= await User.updateOne({email:isUserExists?.email},{password:payload?.newPassword},{new:true})
+// console.log(res);
+  return res
+}
+
+
 export const authService = {
   authLogin,
+  changePassword
 };
