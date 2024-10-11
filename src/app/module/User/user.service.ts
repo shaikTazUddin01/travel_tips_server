@@ -59,6 +59,10 @@ const updateProfileImage = async (userId:string, profileImage: string) => {
 };
 
 
+const getMyInFo = async (userId: string) => {
+  const res = await User.findById(userId);
+  return res;
+};
 
 
 export const userService = {
@@ -67,5 +71,6 @@ export const userService = {
   getAlluser,
   getSingleUser,
   deleteUser,
-  updateProfileImage
+  updateProfileImage,
+  getMyInFo
 };

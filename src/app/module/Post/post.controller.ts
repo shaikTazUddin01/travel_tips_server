@@ -99,7 +99,7 @@ const updatePost = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: "post update success",
-    data: null,
+    data: result,
   });
 });
 // post a  comment
@@ -152,6 +152,35 @@ const getSinglePost = catchAsync(async (req, res) => {
   });
 });
 
+// update post by admin
+const updatePostByAdmin = catchAsync(async (req, res) => {
+  // console.log(req.body);
+  // const {userId}=req.user
+  const postId=req.params.id
+ 
+  const result = await postServices.updatepostByAdmin(req.body,postId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post update success",
+    data: result,
+  });
+});
+// get all post by admin
+const getPostByAdmin = catchAsync(async (req, res) => {
+  
+ 
+  const result = await postServices.getpostByAdmin();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "retrieve all post",
+    data: result,
+  });
+});
+
 export const postcontroller = {
   createPost,
   getAllPost,
@@ -163,5 +192,7 @@ export const postcontroller = {
   commentToPost,
   deleteComment,
   updateComment,
-  getSinglePost
+  getSinglePost,
+  updatePostByAdmin,
+  getPostByAdmin
 };

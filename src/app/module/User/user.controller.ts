@@ -87,11 +87,26 @@ const updateProfileImage = catchAsync(async (req, res) => {
   });
 });
 
+
+// get my data
+const getMyInFo = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await userService.getSingleUser(userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "retrieve user success",
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
   updateUser,
   getAllUser,
   getSingleUser,
   deleteUser,
-  updateProfileImage
+  updateProfileImage,
+  getMyInFo
 };

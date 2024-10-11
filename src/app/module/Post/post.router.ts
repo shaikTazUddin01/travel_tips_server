@@ -14,9 +14,11 @@ router.get("/getSpecificUserPost/:id",auth("USER","ADMIN") ,postcontroller.getSp
 router.delete("/delete-post/:id",auth("USER","ADMIN") ,postcontroller.deletePost);
 router.post("/upvoteDownvote",auth("USER","ADMIN") ,postcontroller.upvoteToUser);
 router.patch("/updatePost/:id",auth("USER","ADMIN") ,postcontroller.updatePost);
+router.patch("/updatePostByAdmin/:id",auth("ADMIN") ,postcontroller.updatePostByAdmin);
 router.post("/comment",auth("USER","ADMIN") ,postcontroller.commentToPost);
 router.delete("/comment",auth("USER","ADMIN") ,postcontroller.deleteComment);
 router.patch("/comment",auth("USER","ADMIN") ,postcontroller.updateComment);
 router.get("/getSinglePost/:id",auth("USER","ADMIN") ,postcontroller.getSinglePost);
+router.get("/all-post-byAdmin",auth("ADMIN") ,postcontroller.getPostByAdmin);
 
 export const postRouter = router;

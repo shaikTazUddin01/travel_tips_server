@@ -58,9 +58,9 @@ const createPost = async (payload: IPost, file: string, user: string) => {
 
 const getAllPost = async (queryData: Record<string, string> | null) => {
   try {
-    let query: { type?: string; category?: string; postContent?: any } = {};
+    let query: { type?: string; category?: string; postContent?: any ,status?:string} = {};
 
-    console.log(queryData);
+    // console.log(queryData);
     // Handle filter conditions based on queryData
     if (queryData?.type && queryData.type !== "null") {
       query.type = queryData.type;
@@ -76,6 +76,8 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
     ) {
       query.postContent = { $regex: queryData.search, $options: "i" };
     }
+
+    query.status="Active"
 
     let posts = await Post.find(query)
       .sort({ createdAt: -1 })
@@ -101,13 +103,13 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
 // get my post
 const getMyPost = async (userId: string) => {
   // console.log(userId);
-  const res = await Post.find({ user: userId }).populate("user");
+  const res = await Post.find({ user: userId ,status:"Active"}).populate("user");
   return res;
 };
 // get specific post
 const getSpecificUserPost = async (userId: string) => {
   // console.log(userId);
-  const res = await Post.find({ user: userId }).populate("user");
+  const res = await Post.find({ user: userId ,status:"Active"}).populate("user");
   return res;
 };
 // delete post
@@ -157,7 +159,7 @@ const upvoteToPost = async (
 //update post
 const updatepost = async (payload: any,userId:string,postId:string) => {
   // console.log(payload.updateInFo);
-  const res = await Post.updateOne({ _id: postId ,user:userId}, payload, {
+  const res = await Post.updateOne({ _id: postId ,user:userId }, payload, {
     new: true,
   });
   return res;
@@ -227,11 +229,28 @@ const UpdateComment = async (
 // single post
 const getSinglePost = async (postId: string) => {
   // console.log(payload);
-  const res = await Post.findById(postId).populate("user").populate({
+  const res = await Post.findById(postId ,{status:"Active"}).populate("user").populate({
     path: "comment.userId",
   });
   return res;
 };
+// 
+//update by Admin
+const updatepostByAdmin = async (payload: any,postId:string) => {
+  // console.log(payload.updateInFo);
+  const res = await Post.updateOne({ _id: postId }, payload, {
+    new: true,
+  });
+  return res;
+};
+
+//get all post by Admin
+const getpostByAdmin = async () => {
+  // console.log(payload.updateInFo);
+  const res = await Post.find().populate('user');
+  return res;
+};
+
 
 export const postServices = {
   createPost,
@@ -245,4 +264,6 @@ export const postServices = {
   deleteComment,
   UpdateComment,
   getSinglePost,
+  updatepostByAdmin,
+  getpostByAdmin
 };
