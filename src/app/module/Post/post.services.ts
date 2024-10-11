@@ -228,8 +228,10 @@ const UpdateComment = async (
 
 // single post
 const getSinglePost = async (postId: string) => {
-  // console.log(payload);
-  const res = await Post.findById(postId ,{status:"Active"}).populate("user").populate({
+
+  // const status={status:"Active"}
+
+  const res = await Post.findOne({_id:postId,status:"Active"}).populate("user").populate({
     path: "comment.userId",
   });
   return res;

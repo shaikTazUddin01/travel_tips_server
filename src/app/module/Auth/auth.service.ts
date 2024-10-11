@@ -10,6 +10,12 @@ import config from "../../config";
 const authLogin = async (data: IAuth) => {
   // check user exists or not
   const isUserExists = await User.findOne({ email: data?.email });
+  if (isUserExists?.status =="Blocked") {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "your account has restricted."
+    );
+  }
   if (!isUserExists) {
     throw new AppError(
       httpStatus.UNAUTHORIZED,

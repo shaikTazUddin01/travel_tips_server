@@ -1,6 +1,7 @@
 # <center>Assignment - 06</center>
  **Project Name : Travel Tips & Destination Guides** <br>
- **Live Link : [https://travel-tips-server.vercel.app](https://travel-tips-server.vercel.app)** 
+ **Live Link Server: [https://travel-tips-server.vercel.app](https://travel-tips-server.vercel.app)** 
+ **Live Link Client: [https://travel-tips-seven.vercel.app](https://travel-tips-seven.vercel.app)** 
 
 ## Features
 

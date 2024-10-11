@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 //middleware
-app.use(cors({origin:["http://localhost:3000"],credentials:true}));
+app.use(cors({origin:["https://travel-tips-seven.vercel.app","http://localhost:3000"],credentials:true}));
 app.use(express.json());
 app.use(cookieParser());
 // app.use(bodyParser.urlencoded({ extended: false }));
