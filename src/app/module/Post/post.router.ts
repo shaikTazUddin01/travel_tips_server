@@ -12,6 +12,7 @@ router.get("/all-post", postcontroller.getAllPost);
 router.get("/my-post",auth("USER","ADMIN") ,postcontroller.getMyAllPost);
 router.get("/getSpecificUserPost/:id",auth("USER","ADMIN") ,postcontroller.getSpecificUserPost);
 router.delete("/delete-post/:id",auth("USER","ADMIN") ,postcontroller.deletePost);
+router.delete("/delete-post-byAdmin/:id",auth("ADMIN") ,postcontroller.deletePostByAdmin);
 router.post("/upvoteDownvote",auth("USER","ADMIN") ,postcontroller.upvoteToUser);
 router.patch("/updatePost/:id",auth("USER","ADMIN") ,postcontroller.updatePost);
 router.patch("/updatePostByAdmin/:id",auth("ADMIN") ,postcontroller.updatePostByAdmin);

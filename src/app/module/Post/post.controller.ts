@@ -70,6 +70,20 @@ const deletePost = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// delete post id Admin
+const deletePostByAdmin = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  
+
+  const result = await postServices.deletePostByAdmin(id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post deleted success",
+    data: result,
+  });
+});
 
 // upvote and downvote system
 const upvoteToUser = catchAsync(async (req, res) => {
@@ -194,5 +208,6 @@ export const postcontroller = {
   updateComment,
   getSinglePost,
   updatePostByAdmin,
-  getPostByAdmin
+  getPostByAdmin,
+  deletePostByAdmin
 };

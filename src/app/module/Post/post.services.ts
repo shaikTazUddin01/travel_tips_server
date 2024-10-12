@@ -103,7 +103,7 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
 // get my post
 const getMyPost = async (userId: string) => {
   // console.log(userId);
-  const res = await Post.find({ user: userId ,status:"Active"}).populate("user");
+  const res = await Post.find({ user: userId ,status:"Active"}).sort({createdAt:-1}).populate("user");
   return res;
 };
 // get specific post
@@ -116,6 +116,13 @@ const getSpecificUserPost = async (userId: string) => {
 const deletePost = async (userId: string, id: string) => {
   // console.log(userId,id);
   const res = await Post.deleteOne({ _id: id, user: userId });
+  console.log(res);
+  return res;
+};
+// delete post
+const deletePostByAdmin = async (id: string) => {
+  // console.log(userId,id);
+  const res = await Post.deleteOne({ _id: id});
   console.log(res);
   return res;
 };
@@ -221,7 +228,7 @@ const UpdateComment = async (
   }
   const res = await Post.updateOne(
     { _id: postId, "comment._id": commentId, "comment.userId": userId },
-    { $set: { "comment.$.comment": comment } }
+    { $set: { "comment.$.comment": comment } },{new:true}
   );
   return res;
 };
@@ -267,5 +274,6 @@ export const postServices = {
   UpdateComment,
   getSinglePost,
   updatepostByAdmin,
-  getpostByAdmin
+  getpostByAdmin,
+  deletePostByAdmin
 };
