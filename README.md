@@ -1,5 +1,5 @@
-# <center>Assignment - 06</center>
- **Project Name : Travel Tips & Destination Guides** <br>
+# <center>Project Name : Travel Tips & Destination Guides</center>
+
  **Live Link Server: [https://travel-tips-server.vercel.app](https://travel-tips-server.vercel.app)** </br>
  **Live Link Client: [https://travel-tips-seven.vercel.app](https://travel-tips-seven.vercel.app)** 
 
