@@ -33,9 +33,8 @@ const updateUser = catchAsync(async (req, res) => {
 });
 // get all user profile
 const getAllUser = catchAsync(async (req, res) => {
- 
-  const result = await userService.getAlluser();
-
+  const query=req.query
+    const result = await userService.getAlluser(query);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -101,6 +100,19 @@ const getMyInFo = catchAsync(async (req, res) => {
   });
 });
 
+// send Friend request
+const sendFriendRequest = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await userService.sendFriendRequest(userId,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "request send success",
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
   updateUser,
@@ -108,5 +120,6 @@ export const userController = {
   getSingleUser,
   deleteUser,
   updateProfileImage,
-  getMyInFo
+  getMyInFo,
+  sendFriendRequest
 };

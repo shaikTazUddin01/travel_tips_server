@@ -5,6 +5,7 @@ import { User } from "./user.model";
 import config from "../../config";
 import { decodedToken } from "../../utils/decodedToken";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { QueryParams } from "../../type";
 
 // create new user
 const createUserInFoDB = async (data: IUSER, profileImage: string) => {
@@ -27,16 +28,23 @@ const createUserInFoDB = async (data: IUSER, profileImage: string) => {
 };
 
 //update profile
-const updateProfile = async  (userId:string , payload: Partial<IUSER>) => {
- 
-  const res = await User.updateOne({_id:userId}, payload, {
+const updateProfile = async (userId: string, payload: Partial<IUSER>) => {
+  const res = await User.updateOne({ _id: userId }, payload, {
     new: true,
   });
   return res;
 };
 
-const getAlluser = async () => {
-  const res = await User.find();
+const getAlluser = async (query: QueryParams) => {
+  // console.log(query);
+  const filter = query.verified ? { isVerify: true } : {};
+
+  if (query.verified) {
+    filter.isVerify = true;
+  }
+  // console.log(filter);
+
+  const res = await User.find(filter);
   return res;
 };
 
@@ -50,20 +58,37 @@ const deleteUser = async (userId: string) => {
   return res;
 };
 
-
 // update Profile image
-const updateProfileImage = async (userId:string, profileImage: string) => {
-  const res = await User.updateOne({_id:userId},{image:profileImage});
+const updateProfileImage = async (userId: string, profileImage: string) => {
+  const res = await User.updateOne({ _id: userId }, { image: profileImage });
   return res;
   // return res
 };
-
 
 const getMyInFo = async (userId: string) => {
   const res = await User.findById(userId);
   return res;
 };
 
+// send friend request
+const sendFriendRequest = async (
+  userId: string,
+  requestedUserId: Record<string, string>
+) => {
+  const myId = userId;
+  const sendRequestId = requestedUserId?.userId;
+
+  const res = await User.updateOne(
+    { _id: myId },
+    { $addToSet: { sendFriendRequest: sendRequestId } }
+  );
+
+ if (res?.modifiedCount) {
+   await User.updateOne({_id:sendRequestId},{$addToSet:{receivedFriendRequest:myId}})
+ }
+
+  return res;
+};
 
 export const userService = {
   createUserInFoDB,
@@ -72,5 +97,6 @@ export const userService = {
   getSingleUser,
   deleteUser,
   updateProfileImage,
-  getMyInFo
+  getMyInFo,
+  sendFriendRequest,
 };

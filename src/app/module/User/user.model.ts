@@ -6,17 +6,28 @@ import { defaultUserImage } from "../../constant/userRole";
 
 const userSchema = new Schema<IUSER>({
   name: { type: String, required: true },
-  userName:{type:String},
+  userName: { type: String },
   email: { type: String, required: true, unique: true },
   address: { type: String, required: true },
   password: { type: String, required: true },
-  image: { type: String, required: true,default:defaultUserImage },
+  image: { type: String, required: true, default: defaultUserImage },
   age: { type: Number, required: true },
   gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
   role: { type: String, enum: ["USER", "ADMIN"], required: true },
   phoneNumber: { type: String, required: true },
-  isVerify:{type:Boolean,default:false},
-  status:{type:String,enum:["Active","Blocked"],default:"Active"}
+  isVerify: { type: Boolean, default: false },
+  status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
+  sendFriendRequest: {
+    type: [Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
+  },
+  receivedFriendRequest: {
+    type: [Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
+  },
+  myFriendList: { type: [Schema.Types.ObjectId], ref: "User", default: [] },
 });
 
 userSchema.pre("save", async function (next) {
@@ -31,7 +42,10 @@ userSchema.pre("updateOne", async function (next) {
   const update = this.getUpdate() as UpdateQuery<IUSER>;
 
   if (update?.password) {
-    update.password = await bcrypt.hash(update.password, Number(config.saltRounds));
+    update.password = await bcrypt.hash(
+      update.password,
+      Number(config.saltRounds)
+    );
   }
 
   next();
