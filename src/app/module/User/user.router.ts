@@ -16,5 +16,7 @@ router.delete('/deleteUser/:id',auth("ADMIN"),userController.deleteUser)
 router.patch('/updateProfileImage',auth("ADMIN","USER"),multerUpload.single('image'),userController.updateProfileImage)
 // send friend request
 router.post('/sendRequest',auth("ADMIN","USER"),userController.sendFriendRequest)
+// confirm request
+router.post('/confirmRequest',auth("ADMIN","USER"),userController.confirmRequest)
 
 export const userRouter = router

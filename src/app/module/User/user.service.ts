@@ -66,11 +66,15 @@ const updateProfileImage = async (userId: string, profileImage: string) => {
 };
 
 const getMyInFo = async (userId: string) => {
-  const res = await User.findById(userId);
+  const res = await User.findById(userId)
+    .populate("receivedFriendRequest")
+    .populate("sendFriendRequest")
+    .populate("myFriendList");
+
   return res;
 };
 
-// send friend request
+// handle friend request
 const sendFriendRequest = async (
   userId: string,
   requestedUserId: Record<string, string>
@@ -78,16 +82,82 @@ const sendFriendRequest = async (
   const myId = userId;
   const sendRequestId = requestedUserId?.userId;
 
+  //if already send then cancel request
+  const isAlreadySend = await User.findOne({
+    _id: myId,
+    sendFriendRequest: sendRequestId,
+  });
+
+  if (isAlreadySend) {
+    const res = await User.updateOne(
+      { _id: myId },
+      { $pull: { sendFriendRequest: sendRequestId } }
+    );
+
+    if (res?.modifiedCount) {
+      await User.updateOne(
+        { _id: sendRequestId },
+        { $pull: { receivedFriendRequest: myId } }
+      );
+    }
+    return res;
+  }
+
+  //if not exists
+
   const res = await User.updateOne(
     { _id: myId },
     { $addToSet: { sendFriendRequest: sendRequestId } }
   );
 
- if (res?.modifiedCount) {
-   await User.updateOne({_id:sendRequestId},{$addToSet:{receivedFriendRequest:myId}})
- }
+  if (res?.modifiedCount) {
+    await User.updateOne(
+      { _id: sendRequestId },
+      { $addToSet: { receivedFriendRequest: myId } }
+    );
+  }
 
   return res;
+};
+// handle confirm request
+const handleConfirmRequest = async (
+  userId: string,
+  requestedUserId: Record<string, string>
+) => {
+  const myId = userId;
+  const RequestedId = requestedUserId?.userId;
+
+  // add to friend
+  const confirm = await User.updateOne(
+    { _id: myId },
+    { $addToSet: { myFriendList: RequestedId } },
+    { new: true }
+  );
+
+  // console.log(confirm);
+  if (confirm?.acknowledged) {
+    // added requested user friend list
+    const addedRequestUserFriendList = await User.updateOne(
+      { _id: RequestedId },
+      { $addToSet: { myFriendList: myId } },
+      { new: true }
+    );
+// delete request
+    if (addedRequestUserFriendList?.acknowledged) {
+      // delete request from received request
+      await User.updateOne(
+        { _id: myId },
+        { $pull: { receivedFriendRequest: RequestedId } }
+      );
+      // delete request from send request
+      await User.updateOne(
+        { _id: RequestedId },
+        { $pull: { sendFriendRequest: myId } }
+      );
+    }
+  }
+
+  return confirm;
 };
 
 export const userService = {
@@ -99,4 +169,5 @@ export const userService = {
   updateProfileImage,
   getMyInFo,
   sendFriendRequest,
+  handleConfirmRequest,
 };

@@ -90,7 +90,8 @@ const updateProfileImage = catchAsync(async (req, res) => {
 // get my data
 const getMyInFo = catchAsync(async (req, res) => {
   const {userId}=req.user
-  const result = await userService.getSingleUser(userId);
+  // console.log(userId);
+  const result = await userService.getMyInFo(userId);
 
   sendResponse(res, {
     success: true,
@@ -112,6 +113,18 @@ const sendFriendRequest = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// handle confirm request
+const confirmRequest = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await userService.handleConfirmRequest(userId,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "accept request",
+    data: result,
+  });
+});
 
 export const userController = {
   createUser,
@@ -121,5 +134,6 @@ export const userController = {
   deleteUser,
   updateProfileImage,
   getMyInFo,
-  sendFriendRequest
+  sendFriendRequest,
+  confirmRequest
 };
