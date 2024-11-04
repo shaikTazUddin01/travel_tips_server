@@ -87,17 +87,19 @@ const sendFriendRequest = async (
     _id: myId,
     sendFriendRequest: sendRequestId,
   });
-
+  console.log("already", isAlreadySend);
   if (isAlreadySend) {
     const res = await User.updateOne(
       { _id: myId },
-      { $pull: { sendFriendRequest: sendRequestId } }
+      { $pull: { sendFriendRequest: sendRequestId } },
+      { new: true }
     );
 
     if (res?.modifiedCount) {
       await User.updateOne(
         { _id: sendRequestId },
-        { $pull: { receivedFriendRequest: myId } }
+        { $pull: { receivedFriendRequest: myId } },
+        { new: true }
       );
     }
     return res;
@@ -107,18 +109,21 @@ const sendFriendRequest = async (
 
   const res = await User.updateOne(
     { _id: myId },
-    { $addToSet: { sendFriendRequest: sendRequestId } }
+    { $addToSet: { sendFriendRequest: sendRequestId } },
+    { new: true }
   );
 
   if (res?.modifiedCount) {
     await User.updateOne(
       { _id: sendRequestId },
-      { $addToSet: { receivedFriendRequest: myId } }
+      { $addToSet: { receivedFriendRequest: myId } },
+      { new: true }
     );
   }
 
   return res;
 };
+
 // handle confirm request
 const handleConfirmRequest = async (
   userId: string,
@@ -142,7 +147,7 @@ const handleConfirmRequest = async (
       { $addToSet: { myFriendList: myId } },
       { new: true }
     );
-// delete request
+    // delete request
     if (addedRequestUserFriendList?.acknowledged) {
       // delete request from received request
       await User.updateOne(
@@ -160,6 +165,26 @@ const handleConfirmRequest = async (
   return confirm;
 };
 
+const handleDeleteRequest = async (
+  userId: string,
+  requestedUserId: Record<string, string>
+) => {
+  const myId = userId;
+  const RequestedId = requestedUserId?.userId;
+
+  const res = await User.updateOne(
+    { _id: myId },
+    { $pull: { receivedFriendRequest: RequestedId } }
+  );
+  // delete request from send request
+  await User.updateOne(
+    { _id: RequestedId },
+    { $pull: { sendFriendRequest: myId } }
+  );
+
+  return res;
+};
+
 export const userService = {
   createUserInFoDB,
   updateProfile,
@@ -170,4 +195,5 @@ export const userService = {
   getMyInFo,
   sendFriendRequest,
   handleConfirmRequest,
+  handleDeleteRequest,
 };

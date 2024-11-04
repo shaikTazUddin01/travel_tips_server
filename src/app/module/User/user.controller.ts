@@ -125,6 +125,18 @@ const confirmRequest = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// handle delete request
+const deleteRequest = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await userService.handleDeleteRequest(userId,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "delete request",
+    data: result,
+  });
+});
 
 export const userController = {
   createUser,
@@ -135,5 +147,6 @@ export const userController = {
   updateProfileImage,
   getMyInFo,
   sendFriendRequest,
-  confirmRequest
+  confirmRequest,
+  deleteRequest
 };

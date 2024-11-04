@@ -18,5 +18,7 @@ router.patch('/updateProfileImage',auth("ADMIN","USER"),multerUpload.single('ima
 router.post('/sendRequest',auth("ADMIN","USER"),userController.sendFriendRequest)
 // confirm request
 router.post('/confirmRequest',auth("ADMIN","USER"),userController.confirmRequest)
+//delete request
+router.post('/deleteRequest',auth("ADMIN","USER"),userController.deleteRequest)
 
 export const userRouter = router
