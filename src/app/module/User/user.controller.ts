@@ -137,6 +137,18 @@ const deleteRequest = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// handle delete request
+const unfriend = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const result = await userService.handleUnfriend(userId,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "unfriend",
+    data: result,
+  });
+});
 
 export const userController = {
   createUser,
@@ -148,5 +160,6 @@ export const userController = {
   getMyInFo,
   sendFriendRequest,
   confirmRequest,
-  deleteRequest
+  deleteRequest,
+  unfriend
 };

@@ -185,6 +185,26 @@ const handleDeleteRequest = async (
   return res;
 };
 
+const handleUnfriend = async (
+  userId: string,
+  requestedUserId: Record<string, string>
+) => {
+  const myId = userId;
+  const RequestedId = requestedUserId?.userId;
+
+  const res = await User.updateOne(
+    { _id: myId },
+    { $pull: { myFriendList: RequestedId } }
+  );
+  // delete request from send request
+  await User.updateOne(
+    { _id: RequestedId },
+    { $pull: { myFriendList: myId } }
+  );
+
+  return res;
+};
+
 export const userService = {
   createUserInFoDB,
   updateProfile,
@@ -196,4 +216,5 @@ export const userService = {
   sendFriendRequest,
   handleConfirmRequest,
   handleDeleteRequest,
+  handleUnfriend
 };

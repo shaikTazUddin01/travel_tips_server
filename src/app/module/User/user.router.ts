@@ -20,5 +20,7 @@ router.post('/sendRequest',auth("ADMIN","USER"),userController.sendFriendRequest
 router.post('/confirmRequest',auth("ADMIN","USER"),userController.confirmRequest)
 //delete request
 router.post('/deleteRequest',auth("ADMIN","USER"),userController.deleteRequest)
+//unfriend
+router.post('/unfriend',auth("ADMIN","USER"),userController.unfriend)
 
 export const userRouter = router
