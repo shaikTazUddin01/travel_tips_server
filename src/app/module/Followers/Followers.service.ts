@@ -7,6 +7,13 @@ const getMyAllFollowers=async(userId:string)=>{
     return res
 }
 
+const getSpecificUserFollowers=async(userId:string)=>{
+    const res=await Follower.findOne({userId}).populate("userId").populate("followers")
+
+    return res
+}
+
 export const followersService={
-    getMyAllFollowers
+    getMyAllFollowers,
+    getSpecificUserFollowers
 }

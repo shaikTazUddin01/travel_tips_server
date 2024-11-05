@@ -9,5 +9,7 @@ const router = Router()
 
 router.get('/myFollowers',auth("USER","ADMIN"),followersController.getMyallFollower)
 
+router.get('/specificFollowers/:userId',auth("USER","ADMIN"),followersController.getSpecificFollower)
+
 
 export const followersRouter = router

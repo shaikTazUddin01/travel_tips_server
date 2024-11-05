@@ -21,5 +21,6 @@ router.delete("/comment",auth("USER","ADMIN") ,postcontroller.deleteComment);
 router.patch("/comment",auth("USER","ADMIN") ,postcontroller.updateComment);
 router.get("/getSinglePost/:id",auth("USER","ADMIN") ,postcontroller.getSinglePost);
 router.get("/all-post-byAdmin",auth("ADMIN") ,postcontroller.getPostByAdmin);
+router.patch("/sharePost",auth("ADMIN","USER") ,postcontroller.sharePost);
 
 export const postRouter = router;

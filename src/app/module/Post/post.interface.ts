@@ -14,6 +14,6 @@ export interface IPost {
   type: "Premium" | "Non-Premium";
   like: Types.ObjectId[];
   comment: IComment[];
-  share: number;
+  share:Types.ObjectId[] ;
   status: "Active" | "Blocked";
 }

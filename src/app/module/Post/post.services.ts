@@ -116,14 +116,14 @@ const getSpecificUserPost = async (userId: string) => {
 const deletePost = async (userId: string, id: string) => {
   // console.log(userId,id);
   const res = await Post.deleteOne({ _id: id, user: userId });
-  console.log(res);
+  // console.log(res);
   return res;
 };
 // delete post
 const deletePostByAdmin = async (id: string) => {
   // console.log(userId,id);
   const res = await Post.deleteOne({ _id: id});
-  console.log(res);
+  // console.log(res);
   return res;
 };
 
@@ -261,6 +261,15 @@ const getpostByAdmin = async () => {
 };
 
 
+//share post
+const sharePost=async(payload:Record<string,string>)=>{
+// console.log(payload);
+  const res= await Post.updateOne({_id:payload?.postId},{$addToSet:{share:payload?.userId}})
+
+  return res
+}
+
+
 export const postServices = {
   createPost,
   getAllPost,
@@ -275,5 +284,6 @@ export const postServices = {
   getSinglePost,
   updatepostByAdmin,
   getpostByAdmin,
-  deletePostByAdmin
+  deletePostByAdmin,
+  sharePost
 };

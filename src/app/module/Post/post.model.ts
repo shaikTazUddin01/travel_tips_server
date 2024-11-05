@@ -50,8 +50,9 @@ const postSchema = new Schema<IPost>(
       default: [],
     },
     share: {
-      type: Number,
-      default: 0,
+      type:  [Schema.Types.ObjectId],
+      ref:"User",
+      default: [],
     },
     status: {
       type: String,

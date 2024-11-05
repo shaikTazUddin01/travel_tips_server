@@ -59,9 +59,9 @@ const getSpecificUserPost = catchAsync(async (req, res) => {
 });
 const deletePost = catchAsync(async (req, res) => {
   const id = req.params.id;
-  const{userId}=req.user
+  const { userId } = req.user;
 
-  const result = await postServices.deletePost(userId,id);
+  const result = await postServices.deletePost(userId, id);
 
   sendResponse(res, {
     success: true,
@@ -73,7 +73,6 @@ const deletePost = catchAsync(async (req, res) => {
 // delete post id Admin
 const deletePostByAdmin = catchAsync(async (req, res) => {
   const id = req.params.id;
-  
 
   const result = await postServices.deletePostByAdmin(id);
 
@@ -104,10 +103,10 @@ const upvoteToUser = catchAsync(async (req, res) => {
 // update post
 const updatePost = catchAsync(async (req, res) => {
   // console.log(req.body);
-  const {userId}=req.user
-  const postId=req.params.id
- 
-  const result = await postServices.updatepost(req.body,userId,postId);
+  const { userId } = req.user;
+  const postId = req.params.id;
+
+  const result = await postServices.updatepost(req.body, userId, postId);
 
   sendResponse(res, {
     success: true,
@@ -118,9 +117,9 @@ const updatePost = catchAsync(async (req, res) => {
 });
 // post a  comment
 const commentToPost = catchAsync(async (req, res) => {
-  const {userId}=req.user
+  const { userId } = req.user;
   // console.log(req.body);
-  const result = await postServices.commentToPost(userId,req.body);
+  const result = await postServices.commentToPost(userId, req.body);
 
   sendResponse(res, {
     success: true,
@@ -131,8 +130,8 @@ const commentToPost = catchAsync(async (req, res) => {
 });
 // delete comment
 const deleteComment = catchAsync(async (req, res) => {
-  const {userId}=req.user
-  const result = await postServices.deleteComment(req.body,userId);
+  const { userId } = req.user;
+  const result = await postServices.deleteComment(req.body, userId);
 
   sendResponse(res, {
     success: true,
@@ -143,8 +142,8 @@ const deleteComment = catchAsync(async (req, res) => {
 });
 // update comment
 const updateComment = catchAsync(async (req, res) => {
-  const {userId}=req.user
-  const result = await postServices.UpdateComment(req.body,userId);
+  const { userId } = req.user;
+  const result = await postServices.UpdateComment(req.body, userId);
 
   sendResponse(res, {
     success: true,
@@ -155,7 +154,7 @@ const updateComment = catchAsync(async (req, res) => {
 });
 // get single post
 const getSinglePost = catchAsync(async (req, res) => {
-  const {id}=req.params
+  const { id } = req.params;
   const result = await postServices.getSinglePost(id);
 
   sendResponse(res, {
@@ -170,9 +169,9 @@ const getSinglePost = catchAsync(async (req, res) => {
 const updatePostByAdmin = catchAsync(async (req, res) => {
   // console.log(req.body);
   // const {userId}=req.user
-  const postId=req.params.id
- 
-  const result = await postServices.updatepostByAdmin(req.body,postId);
+  const postId = req.params.id;
+
+  const result = await postServices.updatepostByAdmin(req.body, postId);
 
   sendResponse(res, {
     success: true,
@@ -183,14 +182,23 @@ const updatePostByAdmin = catchAsync(async (req, res) => {
 });
 // get all post by admin
 const getPostByAdmin = catchAsync(async (req, res) => {
-  
- 
   const result = await postServices.getpostByAdmin();
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "retrieve all post",
+    data: result,
+  });
+});
+// Share Post
+const sharePost = catchAsync(async (req, res) => {
+  const result = await postServices.sharePost(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "post share success",
     data: result,
   });
 });
@@ -209,5 +217,6 @@ export const postcontroller = {
   getSinglePost,
   updatePostByAdmin,
   getPostByAdmin,
-  deletePostByAdmin
+  deletePostByAdmin,
+  sharePost,
 };
