@@ -6,6 +6,7 @@ import { followingRouter } from '../module/Following/following.router'
 import { followersRouter } from '../module/Followers/followers.router'
 import { verifyUserRoutes } from '../module/Verify/verify.router'
 import { paymentRouter } from '../utils/payment/paymant.router'
+import { notificationRouter } from '../module/Notifacation/Notification.router'
 
 const router = Router()
 
@@ -37,6 +38,10 @@ const modulesRoutes = [
   {
     path: '/payment',
     pathRoute: paymentRouter,
+  },
+  {
+    path: '/notification',
+    pathRoute: notificationRouter,
   },
 
 ]
