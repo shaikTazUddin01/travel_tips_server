@@ -10,6 +10,7 @@ const commentSchema = new Schema({
   comment: {
     type: String,
     required: [true, "Comment is required."],
+    default:[]
   },
 });
 
@@ -29,16 +30,20 @@ const postSchema = new Schema<IPost>(
     },
     category: {
       type: String,
-      required: [true, "Category is required."],
+      // required: [true, "Category is required."],
     },
     postContent: {
       type: String,
-      required: [true, "Post content is required."],
+      // required: [true, "Post content is required."],
+    },
+    shareDetails: {
+      type: String ,
+      
     },
     type: {
       type: String,
       enum: ["Premium", "Non-Premium"],
-      required: [true, "Tags are required."],
+      // required: [true, "Tags are required."],
     },
     like: {
       type: [Schema.Types.ObjectId],
@@ -58,6 +63,21 @@ const postSchema = new Schema<IPost>(
       type: String,
       enum: ["Active", "Blocked"],
       default: "Active",
+    },
+    authId: {
+      type:  Schema.Types.ObjectId,
+      ref:"User"
+     
+    },
+    postId: {
+      type:  Schema.Types.ObjectId,
+      ref:"Post",
+     
+    },
+    isThisPostShare: {
+      type:  Boolean,
+      // ref:"Post",
+     
     },
   },
   { timestamps: true }

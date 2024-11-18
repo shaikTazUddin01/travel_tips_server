@@ -21,44 +21,14 @@ const createPost = async (payload: IPost, file: string, user: string) => {
   return res;
 };
 
-// // get all post
-// const getAllPost = async (queryData: Record<string, string> | null) => {
-//   let sorting : { sort: any } = {sort:{ createdAt: -1 }};
-//   let query: { type?: string; category?: string; name?: any } = {};
-//   // default sort
-//   console.log(queryData);
-// // handle filter
-//   if (queryData?.type && queryData.type !== "null") {
-//     query.type = queryData.type;
-//   }
-//   if (queryData?.category && queryData.category !== "null") {
-//     query.category = queryData.category;
-//   }
-//   if (queryData?.search && queryData.search !== "null") {
-//     query.name = { $regex: queryData.search, $options: "i" };
-//   }
-
-//   // handle sorting
-//   if (queryData?.sorting == "asc") {
-//     sorting.sort = { "like.length": 1 };
-//   }
-//   if (queryData?.sorting == "dsc") {
-//     sorting.sort = { "like.length": -1 };
-//   }
-//   console.log("query-->",sorting.sort);
-//   const res = await Post.find(query)
-//     .sort(sorting.sort)
-//     .populate("user")
-//     .populate({
-//       path: "comment.userId",
-//     });
-//   // console.log(res);
-//   return res;
-// };
-
 const getAllPost = async (queryData: Record<string, string> | null) => {
   try {
-    let query: { type?: string; category?: string; postContent?: any ,status?:string} = {};
+    let query: {
+      type?: string;
+      category?: string;
+      postContent?: any;
+      status?: string;
+    } = {};
 
     // console.log(queryData);
     // Handle filter conditions based on queryData
@@ -77,14 +47,15 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
       query.postContent = { $regex: queryData.search, $options: "i" };
     }
 
-    query.status="Active"
+    query.status = "Active";
 
     let posts = await Post.find(query)
       .sort({ createdAt: -1 })
       .populate("user")
       .populate({
         path: "comment.userId",
-      });
+      })
+      .populate("share").populate("authId").populate("postId");
 
     //handle sorting
     if (queryData?.sorting === "dsc") {
@@ -103,13 +74,18 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
 // get my post
 const getMyPost = async (userId: string) => {
   // console.log(userId);
-  const res = await Post.find({ user: userId ,status:"Active"}).sort({createdAt:-1}).populate("user");
+  const res = await Post.find({ user: userId, status: "Active" })
+    .sort({ createdAt: -1 })
+    .populate("user")
+    .populate("share").populate("authId").populate("postId");
   return res;
 };
 // get specific post
 const getSpecificUserPost = async (userId: string) => {
   // console.log(userId);
-  const res = await Post.find({ user: userId ,status:"Active"}).populate("user");
+  const res = await Post.find({ user: userId, status: "Active" })
+    .populate("user")
+    .populate("share").populate("authId").populate("postId");
   return res;
 };
 // delete post
@@ -122,7 +98,7 @@ const deletePost = async (userId: string, id: string) => {
 // delete post
 const deletePostByAdmin = async (id: string) => {
   // console.log(userId,id);
-  const res = await Post.deleteOne({ _id: id});
+  const res = await Post.deleteOne({ _id: id });
   // console.log(res);
   return res;
 };
@@ -164,9 +140,9 @@ const upvoteToPost = async (
 };
 
 //update post
-const updatepost = async (payload: any,userId:string,postId:string) => {
+const updatepost = async (payload: any, userId: string, postId: string) => {
   // console.log(payload.updateInFo);
-  const res = await Post.updateOne({ _id: postId ,user:userId }, payload, {
+  const res = await Post.updateOne({ _id: postId, user: userId }, payload, {
     new: true,
   });
   return res;
@@ -228,24 +204,27 @@ const UpdateComment = async (
   }
   const res = await Post.updateOne(
     { _id: postId, "comment._id": commentId, "comment.userId": userId },
-    { $set: { "comment.$.comment": comment } },{new:true}
+    { $set: { "comment.$.comment": comment } },
+    { new: true }
   );
   return res;
 };
 
 // single post
 const getSinglePost = async (postId: string) => {
-
   // const status={status:"Active"}
 
-  const res = await Post.findOne({_id:postId,status:"Active"}).populate("user").populate({
-    path: "comment.userId",
-  });
+  const res = await Post.findOne({ _id: postId, status: "Active" })
+    .populate("user")
+    .populate({
+      path: "comment.userId",
+    })
+    .populate("share").populate("authId").populate("postId");
   return res;
 };
-// 
+//
 //update by Admin
-const updatepostByAdmin = async (payload: any,postId:string) => {
+const updatepostByAdmin = async (payload: any, postId: string) => {
   // console.log(payload.updateInFo);
   const res = await Post.updateOne({ _id: postId }, payload, {
     new: true,
@@ -256,19 +235,36 @@ const updatepostByAdmin = async (payload: any,postId:string) => {
 //get all post by Admin
 const getpostByAdmin = async () => {
   // console.log(payload.updateInFo);
-  const res = await Post.find().populate('user');
+  const res = await Post.find().populate("user").populate("share").populate("authId").populate("postId");
   return res;
 };
 
-
 //share post
-const sharePost=async(payload:Record<string,string>)=>{
-// console.log(payload);
-  const res= await Post.updateOne({_id:payload?.postId},{$addToSet:{share:payload?.userId}})
+const sharePost = async (payload: Record<string, string>) => {
+  // console.log(payload);
+  const res = await Post.updateOne(
+    { _id: payload?.postId },
+    { $addToSet: { share: payload?.user } }
+  );
 
-  return res
-}
+  // console.log(res);
 
+  if (res) {
+    const data= {
+      user: payload?.user,
+      authId: payload?.authId,
+      shareDetails:payload?.shareDetails,
+      postId:payload?.postId,
+      isThisPostShare:true
+    };
+    
+    const result = await Post.create(data);
+    // console.log(result);
+    return result;
+  }
+
+  // return res
+};
 
 export const postServices = {
   createPost,
@@ -285,5 +281,5 @@ export const postServices = {
   updatepostByAdmin,
   getpostByAdmin,
   deletePostByAdmin,
-  sharePost
+  sharePost,
 };

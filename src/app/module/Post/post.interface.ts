@@ -9,11 +9,15 @@ export interface IComment{
 export interface IPost {
   user: Types.ObjectId;
   image?: string;
-  category: string;
-  postContent: string;
-  type: "Premium" | "Non-Premium";
-  like: Types.ObjectId[];
-  comment: IComment[];
-  share:Types.ObjectId[] ;
-  status: "Active" | "Blocked";
+  category?: string;
+  postContent?: string;
+  type?: "Premium" | "Non-Premium";
+  like?: Types.ObjectId[];
+  comment?: IComment[];
+  share?:Types.ObjectId[] ;
+  shareDetails?:string|null;
+  status?: "Active" | "Blocked";
+  authId?:Types.ObjectId;
+  postId?:Types.ObjectId;
+  isThisPostShare?:boolean;
 }

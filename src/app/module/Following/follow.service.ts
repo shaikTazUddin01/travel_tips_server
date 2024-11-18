@@ -1,5 +1,6 @@
 import { IFollowers } from "../Followers/followers.interface";
 import { Follower } from "../Followers/followers.model";
+import { Notification } from "../Notifacation/notification.model";
 import { Following } from "./following.model";
 
 // // create following
@@ -70,16 +71,24 @@ const createFollowing = async (
     );
 
     if (isFollowing) {
+      // unfollowing
       await Following.updateOne(
         { userId },
         { $pull: { following: following } }
       );
 
+      // unfollowers
       await Follower.updateOne(
         { userId: following },
         { $pull: { followers: userId } }
       );
 
+      // Remove follow notification
+      await Notification.deleteOne({
+        userId: following,
+        senderId: userId,
+        type: "follow",
+      });
       return { message: "Unfollowed successfully" };
     } else {
       await Following.updateOne(
@@ -91,19 +100,33 @@ const createFollowing = async (
 
       if (!existingFollowers) {
         await Follower.create({ userId: following, followers: [userId] });
+
+        // create notification
+        await Notification.create({
+          userId: following,
+          senderId: userId,
+          type: "follow",
+        });
       } else {
         await Follower.updateOne(
           { userId: following },
           { $addToSet: { followers: userId } }
         );
+        // create notification
+        await Notification.create({
+          userId: following,
+          senderId: userId,
+          type: "follow",
+        });
       }
 
       return { message: "Followed successfully" };
     }
   }
-
+  // create following
   const res = await Following.create({ userId, following: [following] });
 
+  // create followers
   const existingFollowers = await Follower.findOne({ userId: following });
 
   if (!existingFollowers) {
@@ -117,6 +140,12 @@ const createFollowing = async (
       { $addToSet: { followers: userId } }
     );
   }
+  // create notification
+  await Notification.create({
+    userId: following,
+    senderId: userId,
+    type: "follow",
+  });
 
   return res;
 };
