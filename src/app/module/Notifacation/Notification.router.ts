@@ -6,6 +6,7 @@ import { auth } from "../../middleware/auth";
 const router=Router()
 
 router.get('/',auth("USER","ADMIN"),notificationController.getMyNotification)
+router.patch('/isread',auth("USER","ADMIN"),notificationController.updateReadNotification)
 
 
 export const notificationRouter=router

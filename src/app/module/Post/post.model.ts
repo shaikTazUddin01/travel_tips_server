@@ -10,7 +10,7 @@ const commentSchema = new Schema({
   comment: {
     type: String,
     required: [true, "Comment is required."],
-    default:[]
+    // default:[]
   },
 });
 

@@ -6,6 +6,7 @@ import config from "../../config";
 import { decodedToken } from "../../utils/decodedToken";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { QueryParams } from "../../type";
+import { Notification } from "../Notifacation/notification.model";
 
 // create new user
 const createUserInFoDB = async (data: IUSER, profileImage: string) => {
@@ -159,6 +160,10 @@ const handleConfirmRequest = async (
         { _id: RequestedId },
         { $pull: { sendFriendRequest: myId } }
       );
+
+      // add notification
+      await Notification.create({userId:RequestedId,senderId:myId,type:"confirm Request"})
+
     }
   }
 

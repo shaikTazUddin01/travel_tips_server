@@ -1,11 +1,12 @@
 import { JwtPayload } from "jsonwebtoken";
 import { decodedToken } from "../../utils/decodedToken";
-import { IUSER } from "../User/user.interface";
+// import { IUSER } from "../User/user.interface";
 import { IPost } from "./post.interface";
 import { Post } from "./post.model";
 import { User } from "../User/user.model";
 import { AppError } from "../../error/AppErrors";
 import httpStatus from "http-status";
+// import mongoose, { Mongoose } from "mongoose";
 
 // create post
 const createPost = async (payload: IPost, file: string, user: string) => {
@@ -55,7 +56,9 @@ const getAllPost = async (queryData: Record<string, string> | null) => {
       .populate({
         path: "comment.userId",
       })
-      .populate("share").populate("authId").populate("postId");
+      .populate("share")
+      .populate("authId")
+      .populate("postId");
 
     //handle sorting
     if (queryData?.sorting === "dsc") {
@@ -77,7 +80,9 @@ const getMyPost = async (userId: string) => {
   const res = await Post.find({ user: userId, status: "Active" })
     .sort({ createdAt: -1 })
     .populate("user")
-    .populate("share").populate("authId").populate("postId");
+    .populate("share")
+    .populate("authId")
+    .populate("postId");
   return res;
 };
 // get specific post
@@ -85,7 +90,9 @@ const getSpecificUserPost = async (userId: string) => {
   // console.log(userId);
   const res = await Post.find({ user: userId, status: "Active" })
     .populate("user")
-    .populate("share").populate("authId").populate("postId");
+    .populate("share")
+    .populate("authId")
+    .populate("postId");
   return res;
 };
 // delete post
@@ -152,22 +159,36 @@ const updatepost = async (payload: any, userId: string, postId: string) => {
 const commentToPost = async (userId: string, payload: any) => {
   const postId = payload?.postId;
   const newComment = {
-    userId: userId,
+    userId:userId,
     comment: payload.comment,
   };
 
-  const res = await Post.updateOne(
-    { _id: postId },
-    {
-      $addToSet: { comment: newComment },
-    },
+  // console.log(postId);
+  console.log(newComment);
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "not found");
+  }
+
+  // console.log(post);
+
+//  post.comment?.push(newComment)
+
+// console.log(post.comment);
+
+  const res = await Post.findByIdAndUpdate(
+    postId,
+    // post,
+    { $push: { comment: newComment } },
     { new: true }
   );
 
-  // console.log(res);
+  console.log(res);
 
   return res;
 };
+
 // delete comment
 const deleteComment = async (
   payload: Record<string, string>,
@@ -219,7 +240,9 @@ const getSinglePost = async (postId: string) => {
     .populate({
       path: "comment.userId",
     })
-    .populate("share").populate("authId").populate("postId");
+    .populate("share")
+    .populate("authId")
+    .populate("postId");
   return res;
 };
 //
@@ -235,7 +258,11 @@ const updatepostByAdmin = async (payload: any, postId: string) => {
 //get all post by Admin
 const getpostByAdmin = async () => {
   // console.log(payload.updateInFo);
-  const res = await Post.find().populate("user").populate("share").populate("authId").populate("postId");
+  const res = await Post.find()
+    .populate("user")
+    .populate("share")
+    .populate("authId")
+    .populate("postId");
   return res;
 };
 
@@ -250,14 +277,14 @@ const sharePost = async (payload: Record<string, string>) => {
   // console.log(res);
 
   if (res) {
-    const data= {
+    const data = {
       user: payload?.user,
       authId: payload?.authId,
-      shareDetails:payload?.shareDetails,
-      postId:payload?.postId,
-      isThisPostShare:true
+      shareDetails: payload?.shareDetails,
+      postId: payload?.postId,
+      isThisPostShare: true,
     };
-    
+
     const result = await Post.create(data);
     // console.log(result);
     return result;
